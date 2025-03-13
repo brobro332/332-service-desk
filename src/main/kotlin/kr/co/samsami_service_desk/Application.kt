@@ -1,4 +1,4 @@
-package kr.co.__service_desk
+package kr.co.samsami_service_desk
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
