@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper">
-    <insert id="createNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeReqDto$CREATE">
-        INSERT INTO notice (
+    <insert id="createNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE">
+        INSERT INTO tbl_notice (
             title,
-            content
+            content,
+            user_email
         ) VALUES (
             #{title, jdbcType=VARCHAR},
-            #{content, jdbcType=VARCHAR}
+            #{content, jdbcType=VARCHAR},
+            #{userEmail, jdbcType=VARCHAR}
         )
     </insert>
 </mapper>
