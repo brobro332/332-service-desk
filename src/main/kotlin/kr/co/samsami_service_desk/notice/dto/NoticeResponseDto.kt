@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(description = "공지사항 목록 조회 응답 DTO")
 class NoticeResponseDto (
     @Schema(description = "작성자 이메일")
-    val userEmail: String,
+    val writerEmail: String,
 
     @Schema(description = "제목")
     val title: String,

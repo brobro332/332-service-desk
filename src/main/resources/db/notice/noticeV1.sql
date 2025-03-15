@@ -4,6 +4,6 @@ CREATE TABLE tbl_notice (
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_email VARCHAR(100),
-    CONSTRAINT tbl_notice_fkey FOREIGN KEY (user_email) REFERENCES "tbl_user" (email)
+    writer_email VARCHAR(100),
+    CONSTRAINT tbl_notice_fkey FOREIGN KEY (writer_email) REFERENCES "tbl_user" (email)
 );

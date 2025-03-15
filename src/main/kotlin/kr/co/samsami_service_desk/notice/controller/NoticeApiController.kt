@@ -43,7 +43,7 @@ class NoticeApiController(private val service: NoticeService) {
             content = [Content(schema = Schema(implementation = NoticeRequestDto.READ::class))]
         )
         @RequestBody dto: NoticeRequestDto.READ): CommonResponseDto<List<NoticeResponseDto>> {
-        return CommonResponseDto.ofSuccess("공지사항이 성공적으로 조회되었습니다.", service.readNotice(dto))
+        return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", service.readNoticeList(dto))
     }
 
     @PutMapping

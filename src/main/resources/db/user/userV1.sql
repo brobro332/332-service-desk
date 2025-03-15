@@ -3,7 +3,8 @@ CREATE TABLE tbl_user (
     password VARCHAR(100) NOT NULL,
     name VARCHAR(20) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
-    user_division VARCHAR(10) NOT NULL,
+    user_division VARCHAR(15) NOT NULL,
+    delete_flag BOOLEAN DEFAULT TRUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -5,18 +5,18 @@
         INSERT INTO tbl_notice (
             title,
             content,
-            user_email
+            writer_email
         ) VALUES (
             #{title, jdbcType=VARCHAR},
             #{content, jdbcType=VARCHAR},
-            #{userEmail, jdbcType=VARCHAR}
+            #{writerEmail, jdbcType=VARCHAR}
         )
     </insert>
 
-    <select id="readNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ" resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto">
+    <select id="readNoticeList" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ" resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto">
         SELECT title,
                content,
-               user_email,
+               writer_email,
                TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
                TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
         FROM tbl_notice

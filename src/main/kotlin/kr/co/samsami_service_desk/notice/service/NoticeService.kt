@@ -22,9 +22,9 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
-    fun readNotice(dto: NoticeRequestDto.READ): List<NoticeResponseDto> {
+    fun readNoticeList(dto: NoticeRequestDto.READ): List<NoticeResponseDto> {
         try {
-            return mapper.readNotice(dto)
+            return mapper.readNoticeList(dto)
         } catch (e: Exception) {
             logger.error("공지사항 목록 조회 중 오류 발생: ${e.message}", e)
             throw RuntimeException("공지사항 목록 조회에 실패했습니다.")

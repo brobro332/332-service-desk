@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface NoticeMapper {
     fun createNotice(dto: NoticeRequestDto.CREATE)
-    fun readNotice(dto: NoticeRequestDto.READ): List<NoticeResponseDto>
+    fun readNoticeList(dto: NoticeRequestDto.READ): List<NoticeResponseDto>
     fun updateNotice(dto: NoticeRequestDto.UPDATE)
     fun deleteNotice(dto: NoticeRequestDto.DELETE)
 }
