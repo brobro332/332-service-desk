@@ -1,6 +1,7 @@
 package kr.co.samsami_service_desk.user.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
+import kr.co.samsami_service_desk.user.UserDivision
 
 @Schema(description = "사용자 요청 DTO")
 class UserRequestDto {
@@ -19,6 +20,6 @@ class UserRequestDto {
         val phoneNumber: String,
 
         @Schema(description = "사용자 구분")
-        val userDivision: String
+        val userDivision: UserDivision
     )
 }

@@ -1,6 +1,7 @@
 package kr.co.samsami_service_desk.notice.service
 
 import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
+import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,6 +19,35 @@ class NoticeService(private val mapper: NoticeMapper) {
         } catch (e: Exception) {
             logger.error("공지사항 등록 중 오류 발생: ${e.message}", e)
             throw RuntimeException("공지사항 등록에 실패했습니다.")
+        }
+    }
+
+    fun readNotice(dto: NoticeRequestDto.READ): List<NoticeResponseDto> {
+        try {
+            return mapper.readNotice(dto)
+        } catch (e: Exception) {
+            logger.error("공지사항 목록 조회 중 오류 발생: ${e.message}", e)
+            throw RuntimeException("공지사항 목록 조회에 실패했습니다.")
+        }
+    }
+
+    @Transactional
+    fun updateNotice(dto: NoticeRequestDto.UPDATE) {
+        try {
+            mapper.updateNotice(dto)
+        } catch (e: Exception) {
+            logger.error("공지사항 정보 수정 중 오류 발생: ${e.message}", e)
+            throw RuntimeException("공지사항 정보 수정에 실패했습니다.")
+        }
+    }
+
+    @Transactional
+    fun deleteNotice(dto: NoticeRequestDto.DELETE) {
+        try {
+            mapper.deleteNotice(dto)
+        } catch (e: Exception) {
+            logger.error("공지사항 삭제 중 오류 발생: ${e.message}", e)
+            throw RuntimeException("공지사항 삭제에 실패했습니다.")
         }
     }
 }

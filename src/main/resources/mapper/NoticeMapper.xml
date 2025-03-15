@@ -12,4 +12,39 @@
             #{userEmail, jdbcType=VARCHAR}
         )
     </insert>
+
+    <select id="readNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ" resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto">
+        SELECT title,
+               content,
+               user_email,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+        FROM tbl_notice
+        <where>
+            <if test="title != null and title != ''">
+                AND title = #{title, jdbcType=VARCHAR}
+            </if>
+            <if test="content != null and content != ''">
+                AND content = #{content, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$UPDATE">
+        UPDATE tbl_notice
+        SET
+        <if test="title != null and title != ''">
+            title = #{title, jdbcType=VARCHAR},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content, jdbcType=VARCHAR}
+        </if>
+        WHERE id = #{id, jdbcType=NUMERIC}
+    </update>
+
+    <delete id="deleteNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$DELETE">
+        DELETE
+        FROM tbl_notice
+        WHERE id = #{id, jdbcType=NUMERIC}
+    </delete>
 </mapper>
