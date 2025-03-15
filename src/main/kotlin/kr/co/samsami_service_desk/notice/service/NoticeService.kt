@@ -1,6 +1,6 @@
 package kr.co.samsami_service_desk.notice.service
 
-import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
+import kr.co.samsami_service_desk.notice.dto.NoticeReqDto
 import kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +12,7 @@ class NoticeService(private val noticeMapper: NoticeMapper) {
     private val logger: Logger = LoggerFactory.getLogger(NoticeService::class.java)
 
     @Transactional
-    fun createNotice(dto: NoticeRequestDto.CREATE) {
+    fun createNotice(dto: NoticeReqDto.CREATE) {
         try {
             noticeMapper.createNotice(dto)
         } catch (e: Exception) {
