@@ -1,0 +1,61 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.samsami_service_desk.inquiry.service.mapper.InquiryMapper">
+    <insert id="createInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$CREATE">
+        INSERT INTO tbl_inquiry (
+            writer_email,
+            title,
+            content,
+            writer_phone_number
+        ) VALUES (
+            #{title, jdbcType=VARCHAR},
+            #{content, jdbcType=VARCHAR},
+            #{writerEmail, jdbcType=VARCHAR}
+            #{writerPhoneNumber, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="readInquiryList" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$READ" resultType="kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto">
+        SELECT title,
+               content,
+               writer_email,
+               writer_phone_number,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+        FROM tbl_inquiry
+        <where>
+            <if test="title != null and title != ''">
+                AND title = #{title, jdbcType=VARCHAR}
+            </if>
+            <if test="content != null and content != ''">
+                AND content = #{content, jdbcType=VARCHAR}
+            </if>
+            <if test="writerEmail != null and writerEmail != ''">
+                writer_email = #{writerEmail, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$UPDATE">
+        UPDATE tbl_inquiry
+        SET
+        <if test="title != null and title != ''">
+            title = #{title, jdbcType=VARCHAR},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content, jdbcType=VARCHAR}
+        </if>
+        <if test="writerPhoneNumber != null and writerPhoneNumber != ''">
+            writer_phone_number = #{writerPhoneNumber, jdbcType=VARCHAR}
+        </if>
+        WHERE id = #{id, jdbcType=VARCHAR}
+        AND email = #{email, jdbcType=NUMERIC}
+    </update>
+
+    <update id="deleteInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$DELETE">
+        UPDATE tbl_inquiry
+        SET delete_flag = FALSE
+        WHERE id = #{id, jdbcType=VARCHAR}
+        AND email = #{email, jdbcType=NUMERIC}
+    </update>
+</mapper>
