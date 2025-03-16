@@ -3,14 +3,14 @@
 <mapper namespace="kr.co.samsami_service_desk.inquiry.service.mapper.InquiryMapper">
     <insert id="createInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$CREATE">
         INSERT INTO tbl_inquiry (
-            writer_email,
             title,
             content,
+            writer_email,
             writer_phone_number
         ) VALUES (
             #{title, jdbcType=VARCHAR},
             #{content, jdbcType=VARCHAR},
-            #{writerEmail, jdbcType=VARCHAR}
+            #{writerEmail, jdbcType=VARCHAR},
             #{writerPhoneNumber, jdbcType=VARCHAR}
         )
     </insert>
@@ -49,13 +49,13 @@
             writer_phone_number = #{writerPhoneNumber, jdbcType=VARCHAR}
         </if>
         WHERE id = #{id, jdbcType=VARCHAR}
-        AND email = #{email, jdbcType=NUMERIC}
+        AND writer_email = #{writerEmail, jdbcType=NUMERIC}
     </update>
 
     <update id="deleteInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$DELETE">
         UPDATE tbl_inquiry
         SET delete_flag = FALSE
         WHERE id = #{id, jdbcType=VARCHAR}
-        AND email = #{email, jdbcType=NUMERIC}
+        AND writer_email = #{writerEmail, jdbcType=NUMERIC}
     </update>
 </mapper>
