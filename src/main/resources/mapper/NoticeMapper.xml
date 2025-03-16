@@ -3,22 +3,22 @@
 <mapper namespace="kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper">
     <insert id="createNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE">
         INSERT INTO tbl_notice (
-        title,
-        content,
-        writer_email
+            title,
+            content,
+            writer_email
         ) VALUES (
-        #{title, jdbcType=VARCHAR},
-        #{content, jdbcType=VARCHAR},
-        #{writerEmail, jdbcType=VARCHAR}
+            #{title, jdbcType=VARCHAR},
+            #{content, jdbcType=VARCHAR},
+            #{writerEmail, jdbcType=VARCHAR}
         )
     </insert>
 
     <select id="readNoticeList" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ" resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto">
         SELECT title,
-        content,
-        writer_email,
-        TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
-        TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+               content,
+               writer_email,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
         FROM tbl_notice
         <where>
             <if test="title != null and title != ''">
