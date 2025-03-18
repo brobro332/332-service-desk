@@ -34,9 +34,11 @@
         FROM tbl_user
         <where>
             <if test="email != null and email != ''">
+                <bind name="likeEmail" value="'%' + email + '%'" />
                 AND email = #{email, jdbcType=VARCHAR}
             </if>
             <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + name + '%'" />
                 AND name = #{name, jdbcType=VARCHAR}
             </if>
             <if test="userDivision != null and userDivision != ''">

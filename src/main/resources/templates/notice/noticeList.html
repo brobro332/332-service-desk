@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body>
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fas fa-newspaper mr-2"></i>
+            공지사항
+        </h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-fixed border-collapse">
+                <thead>
+                <tr class="bg-blue-400 text-white">
+                    <th class="px-4 py-2 w-1/15 border-r">번호</th>
+                    <th class="px-4 py-2 w-8/15 border-r">제목</th>
+                    <th class="px-4 py-2 w-2/15 border-r">등록자</th>
+                    <th class="px-4 py-2 w-2/15 border-r">등록일자</th>
+                    <th class="px-4 py-2 w-2/15 border-r">수정일자</th>
+                </tr>
+                </thead>
+                <tbody id="notice-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="footer" th:replace="~{footer.html}"></div>
+<script>
+window.onload = async function() {
+    try {
+        const response = await axios.get('/api/v1/notice', {
+            params: {
+                title: '',
+                content: ''
+            }
+        });
+        const noticeList = response.data.data;
+        const tableBody = document.getElementById('notice-table-body');
+
+        noticeList.forEach((notice, index) => {
+            const row = document.createElement('tr');
+            row.classList.add('hover:bg-gray-100');
+
+            row.innerHTML = `
+                <td class="px-4 py-2 border-l border-r border-b text-center">${index + 1}</td>
+                <td class="px-4 py-2 border-r border-b">${notice.title}</td>
+                <td class="px-4 py-2 border-r border-b text-center">${notice.writerName}</td>
+                <td class="px-4 py-2 border-r border-b text-center">${notice.createdDate}</td>
+                <td class="px-4 py-2 border-r border-b text-center">${notice.updatedDate}</td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+</script>
+</body>
+</html>

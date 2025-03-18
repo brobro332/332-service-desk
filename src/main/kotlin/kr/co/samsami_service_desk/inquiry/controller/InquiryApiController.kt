@@ -36,7 +36,7 @@ class InquiryApiController(private val service: InquiryService) {
             required = true,
             content = [Content(schema = Schema(implementation = InquiryRequestDto.READ::class))]
         )
-        @RequestBody dto: InquiryRequestDto.READ): CommonResponseDto<List<InquiryResponseDto>> {
+        @ModelAttribute dto: InquiryRequestDto.READ): CommonResponseDto<List<InquiryResponseDto>> {
         return CommonResponseDto.ofSuccess("문의 목록이 성공적으로 조회되었습니다.", service.readInquiryList(dto))
     }
 

@@ -1,7 +1,10 @@
 <!--<?xml version="1.0" encoding="UTF-8" ?>-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.samsami_service_desk.inquiry.service.mapper.InquiryMapper">
-    <insert id="createInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$CREATE">
+    <insert
+        id="createInquiry"
+        parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$CREATE"
+    >
         INSERT INTO tbl_inquiry (
             title,
             content,
@@ -15,7 +18,11 @@
         )
     </insert>
 
-    <select id="readInquiryList" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$READ" resultType="kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto">
+    <select
+        id="readInquiryList"
+        parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$READ"
+        resultType="kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto"
+    >
         SELECT title,
                content,
                writer_email,
@@ -25,18 +32,24 @@
         FROM tbl_inquiry
         <where>
             <if test="title != null and title != ''">
+                <bind name="likeTitle" value="'%' + title + '%'" />
                 AND title = #{title, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
+                <bind name="likeContent" value="'%' + content + '%'" />
                 AND content = #{content, jdbcType=VARCHAR}
             </if>
             <if test="writerEmail != null and writerEmail != ''">
+                <bind name="likeWriterEmail" value="'%' + writerEmail + '%'" />
                 writer_email = #{writerEmail, jdbcType=VARCHAR}
             </if>
         </where>
     </select>
 
-    <update id="updateInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$UPDATE">
+    <update
+        id="updateInquiry"
+        parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$UPDATE"
+    >
         UPDATE tbl_inquiry
         SET
         <if test="title != null and title != ''">
@@ -52,7 +65,10 @@
         AND writer_email = #{writerEmail, jdbcType=NUMERIC}
     </update>
 
-    <update id="deleteInquiry" parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$DELETE">
+    <update
+        id="deleteInquiry"
+        parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$DELETE"
+    >
         UPDATE tbl_inquiry
         SET delete_flag = FALSE
         WHERE id = #{id, jdbcType=VARCHAR}

@@ -7,6 +7,9 @@ class NoticeResponseDto (
     @Schema(description = "작성자 이메일")
     val writerEmail: String,
 
+    @Schema(description = "작성자 이름")
+    val writerName: String,
+
     @Schema(description = "제목")
     val title: String,
 

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper">
-    <insert id="createNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE">
+    <insert
+        id="createNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE"
+    >
         INSERT INTO tbl_notice (
             title,
             content,
@@ -13,24 +16,35 @@
         )
     </insert>
 
-    <select id="readNoticeList" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ" resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto">
-        SELECT title,
-               content,
-               writer_email,
-               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
-               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
-        FROM tbl_notice
+    <select
+        id="readNoticeList"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ"
+        resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto"
+    >
+        SELECT N.title,
+               N.content,
+               N.writer_email,
+               TO_CHAR(N.created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(N.updated_at, 'YYYY-MM-DD') AS updated_date,
+               U.name AS writer_name
+        FROM tbl_notice N LEFT JOIN tbl_user U
+        ON U.email = N.writer_email
         <where>
             <if test="title != null and title != ''">
-                AND title = #{title, jdbcType=VARCHAR}
+                <bind name="likeTitle" value="'%' + title + '%'" />
+                AND title LIKE #{likeTitle, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
-                AND content = #{content, jdbcType=VARCHAR}
+                <bind name="likeContent" value="'%' + content + '%'" />
+                AND content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
         </where>
     </select>
 
-    <update id="updateNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$UPDATE">
+    <update
+        id="updateNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$UPDATE"
+    >
         UPDATE tbl_notice
         SET
         <if test="title != null and title != ''">
@@ -42,7 +56,10 @@
         WHERE id = #{id, jdbcType=NUMERIC}
     </update>
 
-    <delete id="deleteNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$DELETE">
+    <delete
+        id="deleteNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$DELETE"
+    >
         DELETE
         FROM tbl_notice
         WHERE id = #{id, jdbcType=NUMERIC}

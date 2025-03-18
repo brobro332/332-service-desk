@@ -8,13 +8,7 @@ import kr.co.samsami_service_desk.common.dto.CommonResponseDto
 import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
 import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.notice.service.NoticeService
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/notice")
@@ -42,7 +36,7 @@ class NoticeApiController(private val service: NoticeService) {
             required = true,
             content = [Content(schema = Schema(implementation = NoticeRequestDto.READ::class))]
         )
-        @RequestBody dto: NoticeRequestDto.READ): CommonResponseDto<List<NoticeResponseDto>> {
+        @ModelAttribute dto: NoticeRequestDto.READ): CommonResponseDto<List<NoticeResponseDto>> {
         return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", service.readNoticeList(dto))
     }
 

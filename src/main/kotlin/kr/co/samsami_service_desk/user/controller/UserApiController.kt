@@ -36,7 +36,7 @@ class UserApiController (private val service: UserService) {
             required = true,
             content = [Content(schema = Schema(implementation = UserRequestDto.READ::class))]
         )
-        @RequestBody dto: UserRequestDto.READ): CommonResponseDto<List<UserResponseDto>> {
+        @ModelAttribute dto: UserRequestDto.READ): CommonResponseDto<List<UserResponseDto>> {
         return CommonResponseDto.ofSuccess("사용자 목록이 성공적으로 조회되었습니다.", service.readUserList(dto))
     }
 
