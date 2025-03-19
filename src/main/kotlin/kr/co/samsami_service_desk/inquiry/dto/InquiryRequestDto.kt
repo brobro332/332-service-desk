@@ -28,7 +28,13 @@ object InquiryRequestDto {
         val content: String? = null,
 
         @Schema(description = "작성자 이메일")
-        val writerEmail: String? = null
+        val writerEmail: String? = null,
+
+        @Schema(description = "반환 행 수")
+        val limit: Int? = null,
+
+        @Schema(description = "건너뛸 행 수")
+        val offset: Int? = null
     )
 
     @Schema(description = "문의 정보 수정 요청")

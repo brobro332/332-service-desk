@@ -22,7 +22,13 @@ class NoticeRequestDto {
         val title: String? = null,
 
         @Schema(description = "내용")
-        val content: String? = null
+        val content: String? = null,
+
+        @Schema(description = "반환 행 수")
+        val limit: Int? = null,
+
+        @Schema(description = "건너뛸 행 수")
+        val offset: Int? = null
     )
 
     @Schema(description = "공지사항 정보 수정 요청 DTO")

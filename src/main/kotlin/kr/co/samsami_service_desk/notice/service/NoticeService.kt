@@ -31,6 +31,15 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
+    fun countNoticeList(dto: NoticeRequestDto.READ): Long {
+        try {
+            return mapper.countNoticeList(dto)
+        } catch (e: Exception) {
+            logger.error("공지사항 목록 건수 조회 중 오류 발생: ${e.message}", e)
+            throw RuntimeException("공지사항 목록 건수 조회에 실패했습니다.")
+        }
+    }
+
     @Transactional
     fun updateNotice(dto: NoticeRequestDto.UPDATE) {
         try {

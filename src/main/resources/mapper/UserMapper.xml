@@ -35,14 +35,42 @@
         <where>
             <if test="email != null and email != ''">
                 <bind name="likeEmail" value="'%' + email + '%'" />
-                AND email = #{email, jdbcType=VARCHAR}
+                email LIKE #{likeEmail, jdbcType=VARCHAR}
             </if>
             <if test="name != null and name != ''">
                 <bind name="likeName" value="'%' + name + '%'" />
-                AND name = #{name, jdbcType=VARCHAR}
+                name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
             <if test="userDivision != null and userDivision != ''">
-                AND user_division = #{userDivision, jdbcType=VARCHAR}
+                user_division = #{userDivision, jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="limit != null and limit != ''">
+            LIMIT #{limit}
+        </if>
+        <if test="offset != null and offset != ''">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select
+            id="countUserList"
+            parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$READ"
+            resultType="long"
+    >
+        SELECT COUNT(1)
+        FROM tbl_user
+        <where>
+            <if test="email != null and email != ''">
+                <bind name="likeEmail" value="'%' + email + '%'" />
+                email LIKE #{likeEmail, jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + name + '%'" />
+                name LIKE #{likeName, jdbcType=VARCHAR}
+            </if>
+            <if test="userDivision != null and userDivision != ''">
+                user_division = #{userDivision, jdbcType=VARCHAR}
             </if>
         </where>
     </select>

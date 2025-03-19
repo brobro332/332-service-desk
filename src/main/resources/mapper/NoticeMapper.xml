@@ -32,11 +32,37 @@
         <where>
             <if test="title != null and title != ''">
                 <bind name="likeTitle" value="'%' + title + '%'" />
-                AND title LIKE #{likeTitle, jdbcType=VARCHAR}
+                title LIKE #{likeTitle, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
                 <bind name="likeContent" value="'%' + content + '%'" />
-                AND content LIKE #{likeContent, jdbcType=VARCHAR}
+                content LIKE #{likeContent, jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+        <if test="offset != null">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select
+            id="countNoticeList"
+            parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ"
+            resultType="long"
+    >
+        SELECT COUNT(1)
+        FROM tbl_notice N LEFT JOIN tbl_user U
+        ON U.email = N.writer_email
+        <where>
+            <if test="title != null and title != ''">
+                <bind name="likeTitle" value="'%' + title + '%'" />
+                title LIKE #{likeTitle, jdbcType=VARCHAR}
+            </if>
+            <if test="content != null and content != ''">
+                <bind name="likeContent" value="'%' + content + '%'" />
+                content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
         </where>
     </select>

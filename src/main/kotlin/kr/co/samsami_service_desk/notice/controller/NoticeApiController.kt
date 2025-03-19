@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
+import kr.co.samsami_service_desk.common.dto.PagedResultDto
 import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
 import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.notice.service.NoticeService
@@ -36,8 +37,8 @@ class NoticeApiController(private val service: NoticeService) {
             required = true,
             content = [Content(schema = Schema(implementation = NoticeRequestDto.READ::class))]
         )
-        @ModelAttribute dto: NoticeRequestDto.READ): CommonResponseDto<List<NoticeResponseDto>> {
-        return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", service.readNoticeList(dto))
+        @ModelAttribute dto: NoticeRequestDto.READ): CommonResponseDto<PagedResultDto<List<NoticeResponseDto>>> {
+        return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", PagedResultDto(service.countNoticeList(dto), service.readNoticeList(dto)))
     }
 
     @PutMapping

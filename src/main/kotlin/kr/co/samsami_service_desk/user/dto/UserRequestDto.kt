@@ -32,7 +32,13 @@ class UserRequestDto {
         val name: String? = null,
 
         @Schema(description = "사용자 구분")
-        val userDivision: UserDivision? = null
+        val userDivision: UserDivision? = null,
+
+        @Schema(description = "반환 행 수")
+        val limit: Int? = null,
+
+        @Schema(description = "건너뛸 행 수")
+        val offset: Int? = null
     )
 
     @Schema(description = "사용자 정보 수정 요청 DTO")
