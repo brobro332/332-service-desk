@@ -21,7 +21,8 @@
         parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$READ"
         resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto"
     >
-        SELECT N.title,
+        SELECT ROW_NUMBER() OVER (ORDER BY N.created_at) AS row_number,
+               N.title,
                N.content,
                N.writer_email,
                TO_CHAR(N.created_at, 'YYYY-MM-DD') AS created_date,
@@ -39,6 +40,7 @@
                 content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
         </where>
+        ORDER BY N.created_at DESC
         <if test="limit != null">
             LIMIT #{limit}
         </if>

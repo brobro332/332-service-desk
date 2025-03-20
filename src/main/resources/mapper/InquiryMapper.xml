@@ -23,7 +23,8 @@
         parameterType="kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto$READ"
         resultType="kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto"
     >
-        SELECT title,
+        SELECT ROW_NUMBER() OVER (ORDER BY created_at) AS row_number,
+               title,
                content,
                writer_email,
                writer_phone_number,
@@ -44,6 +45,7 @@
                 AND writer_email LIKE #{likeWriterEmail, jdbcType=VARCHAR}
             </if>
         </where>
+        ORDER BY created_at DESC
         <if test="limit != null and limit != ''">
             LIMIT #{limit}
         </if>

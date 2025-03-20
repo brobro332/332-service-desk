@@ -70,7 +70,7 @@ async function loadNoticeList(page) {
             row.classList.add('hover:bg-gray-100');
 
             row.innerHTML = `
-                <td class="px-4 py-2 border-r border-b text-center">${index + 1}</td>
+                <td class="px-4 py-2 border-r border-b text-center">${notice.rowNumber}</td>
                 <td class="px-4 py-2 border-r border-b">${notice.title}</td>
                 <td class="px-4 py-2 border-r border-b text-center">${notice.writerName}</td>
                 <td class="px-4 py-2 border-r border-b text-center">${notice.createdDate}</td>
