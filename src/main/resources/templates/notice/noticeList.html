@@ -27,11 +27,11 @@
             </table>
         </div>
         <div class="mt-4 flex justify-center">
-            <button id="prevPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300">
+            <button id="prevPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300" onclick="moveToPage(currentPage - 1)">
                 이전
             </button>
             <ul id="pagination" class="flex items-center space-x-2"></ul>
-            <button id="nextPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300">
+            <button id="nextPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300" onclick="moveToPage(currentPage + 1)">
                 다음
             </button>
         </div>
@@ -39,15 +39,16 @@
 </div>
 <div class="footer" th:replace="~{footer.html}"></div>
 <script th:inline="javascript">
+let totalPages = 1;
 let currentPage = 1;
 let count = 1;
 const limit = 10;
 
 window.onload = async function() {
-    await loadNotices(currentPage);
+    await loadNoticeList(currentPage);
 };
 
-async function loadNotices(page) {
+async function loadNoticeList(page) {
     try {
         const response = await axios.get('/api/v1/notice', {
             params: {
@@ -61,6 +62,8 @@ async function loadNotices(page) {
         count = response.data.data.count;
         const noticeList = response.data.data.list;
         const tableBody = document.getElementById('notice-table-body');
+
+        tableBody.innerHTML = '';
 
         noticeList.forEach((notice, index) => {
             const row = document.createElement('tr');
@@ -80,7 +83,7 @@ async function loadNotices(page) {
         createPaginationButtons();
 
         document.getElementById('prevPageBtn').disabled = currentPage === 1;
-        document.getElementById('nextPageBtn').disabled = 10 * currentPage >= count;
+        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
     } catch (error) {
         console.error(error);
     }
@@ -90,20 +93,21 @@ function createPaginationButtons() {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
+   totalPages = Math.ceil(count / limit);
     let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(count, currentPage + 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
 
     for (let i = startPage; i <= endPage; i++) {
         const pageButton = document.createElement('li');
-        pageButton.innerHTML = `<button class="px-4 py-2 border rounded-md ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100'}" onclick="goToPage(${i})">${i}</button>`;
+        pageButton.innerHTML = `<button class="px-4 py-2 border rounded-md ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100'}" onclick="moveToPage(${i})">${i}</button>`;
         pagination.appendChild(pageButton);
     }
 }
 
-function goToPage(page) {
+function moveToPage(page) {
     if (page < 1 || page > count) return;
     currentPage = page;
-    loadNotices(currentPage);
+    loadNoticeList(currentPage);
 }
 </script>
 </body>

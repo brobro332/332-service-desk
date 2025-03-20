@@ -28,8 +28,8 @@ fun main(args: Array<String>) {
 				stmt.setString(6, "test1@test.com")
 				stmt.executeUpdate()
 			}
-			stmt.close();
+			stmt.close()
 		}
-		conn.close();
+		conn.close()
 	}
 }
