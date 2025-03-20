@@ -64,15 +64,15 @@
         <where>
             <if test="title != null and title != ''">
                 <bind name="likeTitle" value="'%' + title + '%'" />
-                title LIKE #{likeTitle, jdbcType=VARCHAR}
+                AND title LIKE #{likeTitle, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
                 <bind name="likeContent" value="'%' + content + '%'" />
-                content LIKE #{likeContent, jdbcType=VARCHAR}
+                AND content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
             <if test="writerEmail != null and writerEmail != ''">
                 <bind name="likeWriterEmail" value="'%' + writerEmail + '%'" />
-                writer_email LIKE #{writerEmail, jdbcType=VARCHAR}
+                AND writer_email LIKE #{writerEmail, jdbcType=VARCHAR}
             </if>
         </where>
     </select>

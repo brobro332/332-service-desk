@@ -36,14 +36,14 @@
         <where>
             <if test="email != null and email != ''">
                 <bind name="likeEmail" value="'%' + email + '%'" />
-                email LIKE #{likeEmail, jdbcType=VARCHAR}
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
             </if>
             <if test="name != null and name != ''">
                 <bind name="likeName" value="'%' + name + '%'" />
-                name LIKE #{likeName, jdbcType=VARCHAR}
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
             <if test="userDivision != null and userDivision != ''">
-                user_division = #{userDivision, jdbcType=VARCHAR}
+                AND user_division = #{userDivision, jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY created_at DESC
@@ -65,14 +65,14 @@
         <where>
             <if test="email != null and email != ''">
                 <bind name="likeEmail" value="'%' + email + '%'" />
-                email LIKE #{likeEmail, jdbcType=VARCHAR}
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
             </if>
             <if test="name != null and name != ''">
                 <bind name="likeName" value="'%' + name + '%'" />
-                name LIKE #{likeName, jdbcType=VARCHAR}
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
             <if test="userDivision != null and userDivision != ''">
-                user_division = #{userDivision, jdbcType=VARCHAR}
+                AND user_division = #{userDivision, jdbcType=VARCHAR}
             </if>
         </where>
     </select>

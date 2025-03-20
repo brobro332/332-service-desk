@@ -33,11 +33,11 @@
         <where>
             <if test="title != null and title != ''">
                 <bind name="likeTitle" value="'%' + title + '%'" />
-                title LIKE #{likeTitle, jdbcType=VARCHAR}
+                AND title LIKE #{likeTitle, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
                 <bind name="likeContent" value="'%' + content + '%'" />
-                content LIKE #{likeContent, jdbcType=VARCHAR}
+                AND content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY N.created_at DESC
@@ -60,11 +60,11 @@
         <where>
             <if test="title != null and title != ''">
                 <bind name="likeTitle" value="'%' + title + '%'" />
-                title LIKE #{likeTitle, jdbcType=VARCHAR}
+                AND title LIKE #{likeTitle, jdbcType=VARCHAR}
             </if>
             <if test="content != null and content != ''">
                 <bind name="likeContent" value="'%' + content + '%'" />
-                content LIKE #{likeContent, jdbcType=VARCHAR}
+                AND content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
         </where>
     </select>

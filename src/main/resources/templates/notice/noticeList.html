@@ -12,6 +12,16 @@
             공지사항
         </h1>
         <div class="overflow-x-auto">
+            <div class="flex items-center space-x-2 mb-4">
+                <label for="searchTitle"></label>
+                <input id="searchTitle" type="text" placeholder="제목 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3">
+                <label for="searchContent"></label>
+                <input id="searchContent" type="text" placeholder="내용 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3">
+                <button onclick="searchNoticeList()"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400">
+                    검색
+                </button>
+            </div>
             <table class="min-w-full table-fixed border-collapse">
                 <thead>
                 <tr class="bg-blue-400 text-white">
@@ -50,10 +60,13 @@ window.onload = async function() {
 
 async function loadNoticeList(page) {
     try {
+        const title = document.getElementById('searchTitle').value;
+        const content = document.getElementById('searchContent').value;
+
         const response = await axios.get('/api/v1/notice', {
             params: {
-                title: '',
-                content: '',
+                title: title,
+                content: content,
                 limit: limit,
                 offset: 10 * (currentPage - 1)
             }
@@ -89,6 +102,11 @@ async function loadNoticeList(page) {
     }
 };
 
+function searchNoticeList() {
+    currentPage = 1;
+    loadNoticeList(currentPage);
+}
+
 function createPaginationButtons() {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
@@ -109,6 +127,14 @@ function moveToPage(page) {
     currentPage = page;
     loadNoticeList(currentPage);
 }
+
+document.querySelectorAll('#searchTitle, #searchContent').forEach(input => {
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            searchNoticeList();
+        }
+    });
+});
 </script>
 </body>
 </html>
