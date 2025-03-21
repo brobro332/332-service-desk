@@ -25,7 +25,7 @@
                 <button class="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600">
                     엑셀일괄등록
                 </button>
-                <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400" onclick="window.location.href='/notice/createNotice';">
                     등록
                 </button>
                 <button id="toggle-delete-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400" onclick="toggleDeleteBtn()">
@@ -125,16 +125,33 @@ function searchNoticeList() {
 
 async function deleteNotice(noticeId) {
     try {
+        showLoadingSpinner();
+
         const response = await axios.delete('/api/v1/notice', {
             data: {
                 id: noticeId
             }
         });
 
-        await loadNoticeList(1);
-        toggleDeleteBtn();
+        if (count > 1 && count % 10 == 1) currentPage--;
+        await loadNoticeList(currentPage);
+
+        const toggleDeleteButton = document.getElementById('toggle-delete-btn');
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+
+        toggleDeleteButton.innerText = "취소";
+        toggleDeleteButton.classList.remove("bg-red-500");
+        toggleDeleteButton.classList.remove("hover:bg-red-400");
+        toggleDeleteButton.classList.add("bg-red-600");
+        toggleDeleteButton.classList.add("hover:bg-red-500");
+
+        deleteBtns.forEach(btn => {
+            btn.classList.toggle('hide');
+        });
     } catch (error) {
         console.error(error);
+    } finally {
+        hideLoadingSpinner();
     }
 }
 

@@ -11,4 +11,9 @@ class NoticeController {
     fun showNoticeListPage(): String {
         return "/notice/noticeList"
     }
+
+    @GetMapping("/createNotice")
+    fun showCreateNoticePage(): String {
+        return "/notice/createNotice"
+    }
 }
