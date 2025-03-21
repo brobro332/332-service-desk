@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "문의 요청 DTO")
 object InquiryRequestDto {
-    @Schema(description = "문의 등록 요청")
+    @Schema(
+        name = "createInquiryDto",
+        description = "문의 등록 요청"
+    )
     class CREATE (
         @Schema(description = "제목")
         val title: String,
@@ -19,7 +22,10 @@ object InquiryRequestDto {
         val writerPhoneNumber: String? = null
     )
 
-    @Schema(description = "문의 목록 조회 요청")
+    @Schema(
+        name = "readInquiryDto",
+        description = "문의 목록 조회 요청"
+    )
     class READ (
         @Schema(description = "제목")
         val title: String? = null,
@@ -37,7 +43,10 @@ object InquiryRequestDto {
         val offset: Int? = null
     )
 
-    @Schema(description = "문의 정보 수정 요청")
+    @Schema(
+        name = "updateInquiryDto",
+        description = "문의 정보 수정 요청"
+    )
     class UPDATE (
         @Schema(description = "아이디")
         val id: Long,
@@ -55,7 +64,10 @@ object InquiryRequestDto {
         val writerPhoneNumber: String? = null
     )
 
-    @Schema(description = "문의 삭제 요청")
+    @Schema(
+        name = "deleteInquiryDto",
+        description = "문의 삭제 요청"
+    )
     class DELETE (
         @Schema(description = "아이디")
         val id: Long,

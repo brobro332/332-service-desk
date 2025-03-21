@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "공지사항 요청 DTO")
 class NoticeRequestDto {
-    @Schema(description = "공지사항 등록 요청 DTO")
+    @Schema(
+        name = "createNoticeDto",
+        description = "공지사항 등록 요청"
+    )
     class CREATE (
         @Schema(description = "제목")
         val title: String,
@@ -16,7 +19,10 @@ class NoticeRequestDto {
         val writerEmail: String
     )
 
-    @Schema(description = "공지사항 목록 조회 요청 DTO")
+    @Schema(
+        name = "readNoticeDto",
+        description = "공지사항 목록 조회 요청"
+    )
     class READ (
         @Schema(description = "제목")
         val title: String? = null,
@@ -31,7 +37,10 @@ class NoticeRequestDto {
         val offset: Int? = null
     )
 
-    @Schema(description = "공지사항 정보 수정 요청 DTO")
+    @Schema(
+        name = "updateNoticeDto",
+        description = "공지사항 정보 수정 요청"
+    )
     class UPDATE (
         @Schema(description = "아이디")
         val id: Long,
@@ -43,7 +52,10 @@ class NoticeRequestDto {
         val content: String? = null
     )
 
-    @Schema(description = "공지사항 삭제 요청 DTO")
+    @Schema(
+        name = "deleteNoticeDto",
+        description = "공지사항 삭제 요청"
+    )
     class DELETE (
         @Schema(description = "아이디")
         val id: Long
