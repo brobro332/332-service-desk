@@ -7,6 +7,9 @@ class InquiryResponseDto (
     @Schema(description = "행 번호")
     val rowNumber: Int,
 
+    @Schema(description = "아이디")
+    val id: Int,
+
     @Schema(description = "작성자 이메일")
     val writerEmail: String,
 

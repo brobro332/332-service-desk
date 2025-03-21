@@ -24,6 +24,7 @@
         resultType="kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto"
     >
         SELECT ROW_NUMBER() OVER (ORDER BY created_at) AS row_number,
+               id,
                title,
                content,
                writer_email,

@@ -22,6 +22,7 @@
         resultType="kr.co.samsami_service_desk.notice.dto.NoticeResponseDto"
     >
         SELECT ROW_NUMBER() OVER (ORDER BY N.created_at) AS row_number,
+               N.id,
                N.title,
                N.content,
                N.writer_email,
