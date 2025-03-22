@@ -1,4 +1,4 @@
-package kr.co.samsami_service_desk.inquiry.dto
+package kr.co.samsami_service_desk.ticket.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 

@@ -1,17 +1,19 @@
-package kr.co.samsami_service_desk.inquiry.controller
+package kr.co.samsami_service_desk.ticket.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
-import kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto
-import kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto
-import kr.co.samsami_service_desk.inquiry.service.InquiryService
+import kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto
+import kr.co.samsami_service_desk.ticket.dto.InquiryResponseDto
+import kr.co.samsami_service_desk.ticket.service.InquiryService
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = "Ticket", description = "티켓 API")
 @RestController
-@RequestMapping("/api/v1/inquiry")
+@RequestMapping("/api/v1/ticket/inquiry")
 class InquiryApiController(private val service: InquiryService) {
     @PostMapping
     @ApiResponse(responseCode = "200", description = "문의 등록 완료")

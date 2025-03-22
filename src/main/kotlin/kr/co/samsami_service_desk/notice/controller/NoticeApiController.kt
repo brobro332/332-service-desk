@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
 import kr.co.samsami_service_desk.common.dto.PagedResultDto
 import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
@@ -11,6 +12,7 @@ import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.notice.service.NoticeService
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = "Notice", description = "공지사항 API")
 @RestController
 @RequestMapping("/api/v1/notice")
 class NoticeApiController(private val service: NoticeService) {
