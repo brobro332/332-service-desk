@@ -22,7 +22,7 @@
                     <textarea id="content" placeholder="내용을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full min-h-90 border-gray-300"></textarea>
                 </div>
                 <div class="mb-4 flex justify-end">
-                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="window.location.href='/notice/noticeList';">
+                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="redirectToPreviousPage()">
                         뒤로가기
                     </button>
                     <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="saveNotice()">
@@ -34,78 +34,91 @@
     </div>
 </div>
 <script th:inline="javascript">
-    const id = new URLSearchParams(window.location.search).get('id');
-    let createFlag = true;
+const id = new URLSearchParams(window.location.search).get('id');
+let createFlag = true;
 
-    window.onload = async function() {
-        if (id) {
-            createFlag = false;
-            await loadNoticeInformation(id);
+window.onload = async function() {
+    if (id) {
+        createFlag = false;
+        await loadNoticeInformation(id);
+    }
+};
+
+async function loadNoticeInformation(id) {
+    try {
+        if (!id) {
+            showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+            return;
         }
-    };
 
-    async function loadNoticeInformation(id) {
-        try {
+        const response = await axios.get('/api/v1/notice', {
+            params: { id: id }
+        });
+
+        const noticeList = response.data.data.list;
+        if (!noticeList || noticeList.length === 0) {
+            showErrorMessage("해당 공지사항을 찾을 수 없습니다.");
+            return;
+        }
+
+        const notice = noticeList[0];
+
+        document.getElementById("title").value = notice.title;
+        document.getElementById("content").textContent = notice.content;
+    } catch (error) {
+        console.error(error);
+        showErrorMessage("공지사항 정보를 불러오는 데 실패했습니다.");
+    }
+}
+
+async function saveNotice() {
+    showLoadingSpinner();
+
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    try {
+        let response;
+
+        if (createFlag) {
+            response = await axios.post('/api/v1/notice', {
+                title: title,
+                content: content,
+                writerEmail: 'test1@test.com'
+            });
+        } else {
             if (!id) {
                 showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
                 return;
             }
 
-            const response = await axios.get('/api/v1/notice', {
-                params: { id: id }
+            response = await axios.put('/api/v1/notice', {
+                id: id,
+                title: title,
+                content: content
             });
-
-            const noticeList = response.data.data.list;
-            if (!noticeList || noticeList.length === 0) {
-                showErrorMessage("해당 공지사항을 찾을 수 없습니다.");
-                return;
-            }
-
-            const notice = noticeList[0];
-
-            document.getElementById("title").value = notice.title;
-            document.getElementById("content").textContent = notice.content;
-        } catch (error) {
-            console.error(error);
-            showErrorMessage("공지사항 정보를 불러오는 데 실패했습니다.");
         }
+
+        window.location.href='/notice/noticeList';
+    } catch (error) {
+        console.error(error);
+    } finally {
+        hideLoadingSpinner();
     }
+}
 
-    async function saveNotice() {
-        showLoadingSpinner();
-
-        const title = document.getElementById('title').value;
-        const content = document.getElementById('content').value;
-
-        try {
-            let response;
-
-            if (createFlag) {
-                response = await axios.post('/api/v1/notice', {
-                    title: title,
-                    content: content,
-                    writerEmail: 'test1@test.com'
-                });
-            } else {
-                if (!id) {
-                    showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
-                    return;
-                }
-
-                response = await axios.put('/api/v1/notice', {
-                    id: id,
-                    title: title,
-                    content: content
-                });
-            }
-
-            window.location.href='/notice/noticeList';
-        } catch (error) {
-            console.error(error);
-        } finally {
-            hideLoadingSpinner();
+function redirectToPreviousPage() {
+    if (createFlag) {
+        window.location.href='/notice/noticeList';
+    } else {
+        if (!id) {
+            showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+            return;
         }
+
+        window.location.href='/notice/noticeInformation?id='+id;
     }
+}
 </script>
 <div class="footer" th:replace="~{footer.html}"></div>
 </body>
