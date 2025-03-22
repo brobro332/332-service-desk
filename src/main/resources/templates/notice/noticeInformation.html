@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body class="w-full">
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fas fa-newspaper mr-2"></i>
+            공지사항
+        </h1>
+        <div class="overflow-x-auto">
+            <div class="space-y-6">
+                <div class="flex items-center h-24 w-full bg-blue-500 text-white p-6 mb-6">
+                    <p class="text-2xl font-semibold text-white" id="notice-title"></p>
+                </div>
+
+                <div class="flex space-x-15 mb-6">
+                    <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">작성자</span><span id="notice-author"></span></p>
+                    <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">등록일자</span><span id="notice-created-at"></span></p>
+                    <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">수정일자</span><span id="notice-updated-at"></span></p>
+                </div>
+
+                <div class="bg-blue-100 min-h-84 p-4 rounded-lg mb-4">
+                    <div class="text-md text-gray-700 leading-relaxed" id="notice-content">
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="mb-4 flex justify-end">
+                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="window.location.href='/notice/noticeList';">
+                        뒤로가기
+                    </button>
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="updateNotice()">
+                        수정
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer" th:replace="~{footer.html}"></div>
+<script th:inline="javascript">
+window.onload = async function() {
+    await loadNoticeInformation();
+};
+
+async function loadNoticeInformation() {
+    try {
+        const id = new URLSearchParams(window.location.search).get('id');
+
+        if (!id) {
+            showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+            return;
+        }
+
+        const response = await axios.get('/api/v1/notice', {
+            params: { id: id }
+        });
+
+        const noticeList = response.data.data.list;
+        if (!noticeList || noticeList.length === 0) {
+            showErrorMessage("해당 공지사항을 찾을 수 없습니다.");
+            return;
+        }
+
+        const notice = noticeList[0];
+
+        document.getElementById("notice-title").textContent = notice.title;
+        document.getElementById("notice-author").textContent = notice.writerName;
+        document.getElementById("notice-created-at").textContent = notice.createdDate;
+        document.getElementById("notice-updated-at").textContent = notice.updatedDate;
+        document.getElementById("notice-content").textContent = notice.content;
+
+    } catch (error) {
+        console.error(error);
+        showErrorMessage("공지사항 정보를 불러오는 데 실패했습니다.");
+    }
+}
+</script>
+</body>
+</html>

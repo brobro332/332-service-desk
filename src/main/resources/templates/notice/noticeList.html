@@ -96,7 +96,7 @@ async function loadNoticeList(page) {
             row.innerHTML = `
                 <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${notice.rowNumber}</td>
                 <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 font-bold">
-                <a href="#" class="text-gray-700 hover:underline">
+                <a href="/notice/noticeInformation?id=${notice.id}" class="text-gray-700 hover:underline">
                     ${notice.title}
                 </a>
                 </td>

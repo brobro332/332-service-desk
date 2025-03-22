@@ -40,6 +40,9 @@
                 <bind name="likeContent" value="'%' + content + '%'" />
                 AND content LIKE #{likeContent, jdbcType=VARCHAR}
             </if>
+            <if test="id != null">
+                AND id = #{id, jdbcType=NUMERIC}
+            </if>
         </where>
         ORDER BY N.created_at DESC
         <if test="limit != null">

@@ -30,6 +30,9 @@ class NoticeRequestDto {
         @Schema(description = "내용")
         val content: String? = null,
 
+        @Schema(description = "아이디")
+        val id: Long? = null,
+
         @Schema(description = "반환 행 수")
         val limit: Int? = null,
 

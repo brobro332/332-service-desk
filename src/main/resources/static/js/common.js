@@ -18,3 +18,12 @@ function hideLoadingSpinner() {
         document.body.removeChild(spinner);
     }
 }
+
+function showErrorMessage(message) {
+    const container = document.querySelector(".container");
+    container.innerHTML = `
+        <div class="text-center p-6 bg-red-100 text-red-600 rounded-lg">
+            <p class="text-lg font-semibold">${message}</p>
+        </div>
+    `;
+}

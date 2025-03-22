@@ -11,6 +11,7 @@ class Application
 fun main(args: Array<String>) {
 	runApplication<Application>(*args)
 
+	/*
 	val faker = Faker()
 	val url = "jdbc:log4jdbc:postgresql://localhost:5432/postgres"
 	val user = "postgres"
@@ -32,4 +33,5 @@ fun main(args: Array<String>) {
 		}
 		conn.close()
 	}
+	 */
 }
