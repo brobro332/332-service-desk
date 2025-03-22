@@ -5,7 +5,10 @@ import kr.co.samsami_service_desk.user.UserDivision
 
 @Schema(description = "사용자 요청 DTO")
 class UserRequestDto {
-    @Schema(description = "사용자 등록 요청 DTO")
+    @Schema(
+        name = "createUserDto",
+        description = "사용자 등록 요청"
+    )
     class CREATE (
         @Schema(description = "이메일")
         val email: String,
@@ -23,7 +26,10 @@ class UserRequestDto {
         val userDivision: UserDivision
     )
 
-    @Schema(description = "사용자 목록 조회 요청 DTO")
+    @Schema(
+        name = "readUserDto",
+        description = "사용자 목록 조회 요청"
+    )
     class READ (
         @Schema(description = "이메일")
         val email: String? = null,
@@ -32,10 +38,19 @@ class UserRequestDto {
         val name: String? = null,
 
         @Schema(description = "사용자 구분")
-        val userDivision: UserDivision? = null
+        val userDivision: UserDivision? = null,
+
+        @Schema(description = "반환 행 수")
+        val limit: Int? = null,
+
+        @Schema(description = "건너뛸 행 수")
+        val offset: Int? = null
     )
 
-    @Schema(description = "사용자 정보 수정 요청 DTO")
+    @Schema(
+        name = "updateUserDto",
+        description = "사용자 정보 수정 요청"
+    )
     class UPDATE (
         @Schema(description = "이메일")
         val email: String,
@@ -53,7 +68,10 @@ class UserRequestDto {
         val userDivision: UserDivision? = null
     )
 
-    @Schema(description = "사용자 삭제 요청 DTO")
+    @Schema(
+        name = "deleteUserDto",
+        description = "사용자 삭제 요청"
+    )
     class DELETE (
         @Schema(description = "이메일")
         val email: String

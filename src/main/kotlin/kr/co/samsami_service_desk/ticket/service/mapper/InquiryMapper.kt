@@ -1,7 +1,7 @@
-package kr.co.samsami_service_desk.inquiry.service.mapper
+package kr.co.samsami_service_desk.ticket.service.mapper
 
-import kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto
-import kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto
+import kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto
+import kr.co.samsami_service_desk.ticket.dto.InquiryResponseDto
 import org.apache.ibatis.annotations.Mapper
 
 @Mapper

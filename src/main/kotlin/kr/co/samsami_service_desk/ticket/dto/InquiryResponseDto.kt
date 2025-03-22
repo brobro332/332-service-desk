@@ -1,9 +1,15 @@
-package kr.co.samsami_service_desk.inquiry.dto
+package kr.co.samsami_service_desk.ticket.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "문의 목록 조회 응답 DTO")
 class InquiryResponseDto (
+    @Schema(description = "행 번호")
+    val rowNumber: Int,
+
+    @Schema(description = "아이디")
+    val id: Int,
+
     @Schema(description = "작성자 이메일")
     val writerEmail: String,
 

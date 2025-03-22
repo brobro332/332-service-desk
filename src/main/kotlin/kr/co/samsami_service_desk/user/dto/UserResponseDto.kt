@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "사용자 목록 조회 응답 DTO")
 class UserResponseDto (
+    @Schema(description = "행 번호")
+    val rowNumber: Int,
+
     @Schema(description = "작성자 이메일")
     val writerEmail: String,
 

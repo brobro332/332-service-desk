@@ -1,8 +1,8 @@
-package kr.co.samsami_service_desk.inquiry.service
+package kr.co.samsami_service_desk.ticket.service
 
-import kr.co.samsami_service_desk.inquiry.dto.InquiryRequestDto
-import kr.co.samsami_service_desk.inquiry.dto.InquiryResponseDto
-import kr.co.samsami_service_desk.inquiry.service.mapper.InquiryMapper
+import kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto
+import kr.co.samsami_service_desk.ticket.dto.InquiryResponseDto
+import kr.co.samsami_service_desk.ticket.service.mapper.InquiryMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

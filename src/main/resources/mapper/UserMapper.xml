@@ -25,19 +25,51 @@
         parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$READ"
         resultType="kr.co.samsami_service_desk.user.dto.UserResponseDto"
     >
-        SELECT email,
-        name,
-        phone_number,
-        user_division,
-        TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
-        TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+        SELECT ROW_NUMBER() OVER (ORDER BY created_at) AS row_number,
+               email,
+               name,
+               phone_number,
+               user_division,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
         FROM tbl_user
         <where>
             <if test="email != null and email != ''">
-                AND email = #{email, jdbcType=VARCHAR}
+                <bind name="likeEmail" value="'%' + email + '%'" />
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
             </if>
             <if test="name != null and name != ''">
-                AND name = #{name, jdbcType=VARCHAR}
+                <bind name="likeName" value="'%' + name + '%'" />
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
+            </if>
+            <if test="userDivision != null and userDivision != ''">
+                AND user_division = #{userDivision, jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+        <if test="limit != null and limit != ''">
+            LIMIT #{limit}
+        </if>
+        <if test="offset != null and offset != ''">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select
+            id="countUserList"
+            parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$READ"
+            resultType="long"
+    >
+        SELECT COUNT(1)
+        FROM tbl_user
+        <where>
+            <if test="email != null and email != ''">
+                <bind name="likeEmail" value="'%' + email + '%'" />
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + name + '%'" />
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
             <if test="userDivision != null and userDivision != ''">
                 AND user_division = #{userDivision, jdbcType=VARCHAR}
