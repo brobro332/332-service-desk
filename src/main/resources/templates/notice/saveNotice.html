@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body>
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fas fa-newspaper mr-2"></i>
+            공지사항
+        </h1>
+        <div class="overflow-x-auto">
+            <form id="noticeForm">
+                <div class="mb-4">
+                    <label for="title" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">제목</span></label>
+                    <input id="title" type="text" placeholder="제목을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="content" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">내용</span></label>
+                    <textarea id="content" placeholder="내용을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full min-h-90 border-gray-300"></textarea>
+                </div>
+                <div class="mb-4 flex justify-end">
+                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="window.location.href='/notice/noticeList';">
+                        뒤로가기
+                    </button>
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="saveNotice()">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    const id = new URLSearchParams(window.location.search).get('id');
+    let createFlag = true;
+
+    window.onload = async function() {
+        if (id) {
+            createFlag = false;
+            await loadNoticeInformation(id);
+        }
+    };
+
+    async function loadNoticeInformation(id) {
+        try {
+            if (!id) {
+                showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+                return;
+            }
+
+            const response = await axios.get('/api/v1/notice', {
+                params: { id: id }
+            });
+
+            const noticeList = response.data.data.list;
+            if (!noticeList || noticeList.length === 0) {
+                showErrorMessage("해당 공지사항을 찾을 수 없습니다.");
+                return;
+            }
+
+            const notice = noticeList[0];
+
+            document.getElementById("title").value = notice.title;
+            document.getElementById("content").textContent = notice.content;
+        } catch (error) {
+            console.error(error);
+            showErrorMessage("공지사항 정보를 불러오는 데 실패했습니다.");
+        }
+    }
+
+    async function saveNotice() {
+        showLoadingSpinner();
+
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+
+        try {
+            let response;
+
+            if (createFlag) {
+                response = await axios.post('/api/v1/notice', {
+                    title: title,
+                    content: content,
+                    writerEmail: 'test1@test.com'
+                });
+            } else {
+                if (!id) {
+                    showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+                    return;
+                }
+
+                response = await axios.put('/api/v1/notice', {
+                    id: id,
+                    title: title,
+                    content: content
+                });
+            }
+
+            window.location.href='/notice/noticeList';
+        } catch (error) {
+            console.error(error);
+        } finally {
+            hideLoadingSpinner();
+        }
+    }
+</script>
+<div class="footer" th:replace="~{footer.html}"></div>
+</body>
+</html>

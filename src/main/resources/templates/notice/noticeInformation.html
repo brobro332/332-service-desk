@@ -33,7 +33,7 @@
                     <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="window.location.href='/notice/noticeList';">
                         뒤로가기
                     </button>
-                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="updateNotice()">
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="redirectToSaveNotice();">
                         수정
                     </button>
                 </div>
@@ -43,14 +43,14 @@
 </div>
 <div class="footer" th:replace="~{footer.html}"></div>
 <script th:inline="javascript">
+const id = new URLSearchParams(window.location.search).get('id');
+
 window.onload = async function() {
     await loadNoticeInformation();
 };
 
 async function loadNoticeInformation() {
     try {
-        const id = new URLSearchParams(window.location.search).get('id');
-
         if (!id) {
             showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
             return;
@@ -78,6 +78,12 @@ async function loadNoticeInformation() {
         console.error(error);
         showErrorMessage("공지사항 정보를 불러오는 데 실패했습니다.");
     }
+}
+
+function redirectToSaveNotice() {
+    let url = '/notice/saveNotice';
+    if (id) url += `?id=${id}`;
+    window.location.href = url;
 }
 </script>
 </body>
