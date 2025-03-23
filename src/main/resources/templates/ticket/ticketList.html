@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body>
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fas fa-tags"></i>
+            티켓
+        </h1>
+        <div class="overflow-x-auto">
+            <div class="flex items-center space-x-2 mb-4">
+                <label for="searchTitle"></label>
+                <input id="searchTitle" type="text" placeholder="제목 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
+                <label for="searchContent"></label>
+                <input id="searchContent" type="text" placeholder="내용 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
+                <button onclick="searchTicketList()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400">
+                    검색
+                </button>
+
+                <div class="flex-grow"></div>
+
+                <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400" onclick="window.location.href='/ticket/inquiry/createInquiry';">
+                    등록
+                </button>
+                <button id="toggle-delete-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400" onclick="toggleDeleteBtn()">
+                    삭제
+                </button>
+            </div>
+            <table class="min-w-full table-fixed border-collapse bg-white overflow-hidden transition-all duration-500 ease-in-out">
+                <thead>
+                <tr class="bg-blue-500 text-white">
+                    <th class="px-4 py-2 w-1/15 border-r">번호</th>
+                    <th class="px-4 py-2 w-8/15 border-r">제목</th>
+                    <th class="px-4 py-2 w-2/15 border-r">등록자</th>
+                    <th class="px-4 py-2 w-2/15 border-r">등록일자</th>
+                    <th class="px-4 py-2 w-2/15">수정일자</th>
+                </tr>
+                </thead>
+                <tbody id="ticket-table-body">
+                </tbody>
+            </table>
+            <div class="mt-4 flex justify-center">
+                <button id="prevPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300" onclick="moveToPage(currentPage - 1)">
+                    이전
+                </button>
+                <ul id="pagination" class="flex items-center space-x-2"></ul>
+                <button id="nextPageBtn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 disabled:bg-gray-300" onclick="moveToPage(currentPage + 1)">
+                    다음
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer" th:replace="~{footer.html}"></div>
+<script th:inline="javascript">
+let totalPages = 1;
+let currentPage = 1;
+let count = 1;
+const limit = 10;
+
+window.onload = async function() {
+    await loadInquiryList(currentPage);
+};
+
+async function loadInquiryList(page) {
+    try {
+        const title = document.getElementById('searchTitle').value;
+        const content = document.getElementById('searchContent').value;
+
+        const response = await axios.get('/api/v1/ticket/inquiry', {
+            params: {
+                title: title,
+                content: content,
+                limit: limit,
+                offset: 10 * (currentPage - 1)
+            }
+        });
+
+        count = response.data.data.count;
+        const inquiryList = response.data.data.list;
+        const tableBody = document.getElementById('ticket-table-body');
+
+        tableBody.innerHTML = '';
+
+        inquiryList.forEach((inquiry, index) => {
+            const row = document.createElement('tr');
+            row.id = `row-${inquiry.id}`;
+            row.classList.add('transition-opacity', 'duration-300');
+
+            row.innerHTML = `
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${inquiry.rowNumber}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 font-bold">
+                <a href="/ticket/ticketInformation?id=${ticket.id}" class="text-gray-700 hover:underline">
+                    ${inquiry.title}
+                </a>
+                </td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${inquiry.writerName}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${inquiry.createdDate}</td>
+                <td class="px-4 py-2 border-b border-gray-300 text-gray-700 text-center">${inquiry.updatedDate}</td>
+                <button class="delete-btn hide bg-red-500 text-white px-6 py-1 ml-3 mt-1 rounded hover:bg-red-400" style="white-space:nowrap;" onclick="deleteTicket(${inquiry.id})">선택</button>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        createPaginationButtons();
+
+        document.getElementById('prevPageBtn').disabled = currentPage === 1;
+        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+function searchInquiryList() {
+    currentPage = 1;
+    loadInquiryList(currentPage);
+}
+
+async function deleteTicket(ticketId) {
+    try {
+        showLoadingSpinner();
+
+        const response = await axios.delete('/api/v1/ticket', {
+            data: {
+                id: ticketId
+            }
+        });
+
+        if (count > 1 && count % 10 == 1) currentPage--;
+        await loadInquiryList(currentPage);
+
+        const toggleDeleteButton = document.getElementById('toggle-delete-btn');
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+
+        toggleDeleteButton.innerText = "취소";
+        toggleDeleteButton.classList.remove("bg-red-500");
+        toggleDeleteButton.classList.remove("hover:bg-red-400");
+        toggleDeleteButton.classList.add("bg-red-600");
+        toggleDeleteButton.classList.add("hover:bg-red-500");
+
+        deleteBtns.forEach(btn => {
+            btn.classList.toggle('hide');
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        hideLoadingSpinner();
+    }
+}
+
+function toggleDeleteBtn() {
+    const toggleDeleteButton = document.getElementById('toggle-delete-btn');
+    const deleteBtns = document.querySelectorAll('.delete-btn');
+
+    if (toggleDeleteButton.innerText === "삭제") {
+        toggleDeleteButton.innerText = "취소";
+        toggleDeleteButton.classList.remove("bg-red-500");
+        toggleDeleteButton.classList.remove("hover:bg-red-400");
+        toggleDeleteButton.classList.add("bg-red-600");
+        toggleDeleteButton.classList.add("hover:bg-red-500");
+    } else {
+        toggleDeleteButton.innerText = "삭제";
+        toggleDeleteButton.classList.remove("bg-red-600");
+        toggleDeleteButton.classList.remove("hover:bg-red-500");
+        toggleDeleteButton.classList.add("bg-red-500");
+        toggleDeleteButton.classList.add("hover:bg-red-400");
+    }
+
+    deleteBtns.forEach(btn => {
+        btn.classList.toggle('hide');
+    });
+}
+
+function createPaginationButtons() {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    totalPages = Math.ceil(count / limit);
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('li');
+        pageButton.innerHTML = `<button class="px-4 py-2 border rounded-md ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100'}" onclick="moveToPage(${i})">${i}</button>`;
+        pagination.appendChild(pageButton);
+    }
+}
+
+function moveToPage(page) {
+    if (page < 1 || page > count) return;
+    currentPage = page;
+    loadNoticeList(currentPage);
+}
+
+document.querySelectorAll('#searchTitle, #searchContent').forEach(input => {
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            searchNoticeList();
+        }
+    });
+});
+</script>
+</body>
+</html>

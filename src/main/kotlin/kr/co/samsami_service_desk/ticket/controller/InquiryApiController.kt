@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
+import kr.co.samsami_service_desk.common.dto.PagedResultDto
+import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto
 import kr.co.samsami_service_desk.ticket.dto.InquiryResponseDto
 import kr.co.samsami_service_desk.ticket.service.InquiryService
@@ -38,8 +40,8 @@ class InquiryApiController(private val service: InquiryService) {
             required = true,
             content = [Content(schema = Schema(implementation = InquiryRequestDto.READ::class))]
         )
-        @ModelAttribute dto: InquiryRequestDto.READ): CommonResponseDto<List<InquiryResponseDto>> {
-        return CommonResponseDto.ofSuccess("문의 목록이 성공적으로 조회되었습니다.", service.readInquiryList(dto))
+        @ModelAttribute dto: InquiryRequestDto.READ): CommonResponseDto<PagedResultDto<List<InquiryResponseDto>>> {
+        return CommonResponseDto.ofSuccess("문의 목록이 성공적으로 조회되었습니다.", PagedResultDto(service.countInquiryList(dto), service.readInquiryList(dto)))
     }
 
     @PutMapping

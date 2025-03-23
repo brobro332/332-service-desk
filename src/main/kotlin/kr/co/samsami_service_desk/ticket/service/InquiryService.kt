@@ -1,5 +1,6 @@
 package kr.co.samsami_service_desk.ticket.service
 
+import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
 import kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto
 import kr.co.samsami_service_desk.ticket.dto.InquiryResponseDto
 import kr.co.samsami_service_desk.ticket.service.mapper.InquiryMapper
@@ -28,6 +29,15 @@ class InquiryService(private val mapper: InquiryMapper) {
         } catch (e: Exception) {
             logger.error("문의 목록 조회 중 오류 발생: ${e.message}", e)
             throw RuntimeException("문의 목록 조회에 실패했습니다.")
+        }
+    }
+
+    fun countInquiryList(dto: InquiryRequestDto.READ): Long {
+        try {
+            return mapper.countInquiryList(dto)
+        } catch (e: Exception) {
+            logger.error("문의 목록 건수 조회 중 오류 발생: ${e.message}", e)
+            throw RuntimeException("문의 목록 건수 조회에 실패했습니다.")
         }
     }
 

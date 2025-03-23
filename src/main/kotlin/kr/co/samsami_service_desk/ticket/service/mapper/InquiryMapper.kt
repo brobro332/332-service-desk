@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper
 interface InquiryMapper {
     fun createInquiry(dto: InquiryRequestDto.CREATE)
     fun readInquiryList(dto: InquiryRequestDto.READ): List<InquiryResponseDto>
+    fun countInquiryList(dto: InquiryRequestDto.READ): Long
     fun updateInquiry(dto: InquiryRequestDto.UPDATE)
     fun deleteInquiry(dto: InquiryRequestDto.DELETE)
 }
