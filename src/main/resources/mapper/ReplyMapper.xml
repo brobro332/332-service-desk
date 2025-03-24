@@ -6,7 +6,7 @@
         parameterType="kr.co.samsami_service_desk.ticket.dto.ReplyRequestDto$CREATE"
     >
         INSERT INTO tbl_reply (
-            inquiry_id
+            inquiry_id,
             inquiry_writer_email,
             title,
             content,

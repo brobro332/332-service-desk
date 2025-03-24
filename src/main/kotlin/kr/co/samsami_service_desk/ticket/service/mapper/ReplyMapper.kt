@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface ReplyMapper {
     fun createReply(dto: ReplyRequestDto.CREATE)
-    fun readReplyList(dto: ReplyRequestDto.READ): List<ReplyResponseDto>
+    fun readReply(dto: ReplyRequestDto.READ): List<ReplyResponseDto>
     fun updateReply(dto: ReplyRequestDto.UPDATE)
     fun deleteReply(dto: ReplyRequestDto.DELETE)
 }

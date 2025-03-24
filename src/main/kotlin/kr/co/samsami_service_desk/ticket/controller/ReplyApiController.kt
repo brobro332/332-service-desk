@@ -39,7 +39,7 @@ class ReplyApiController(private val service: ReplyService) {
             content = [Content(schema = Schema(implementation = ReplyRequestDto.READ::class))]
         )
         @ModelAttribute dto: ReplyRequestDto.READ): CommonResponseDto<List<ReplyResponseDto>> {
-        return CommonResponseDto.ofSuccess("답변이 성공적으로 조회되었습니다.", service.readReplyList(dto))
+        return CommonResponseDto.ofSuccess("답변이 성공적으로 조회되었습니다.", service.readReply(dto))
     }
 
     @PutMapping

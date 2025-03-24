@@ -78,10 +78,8 @@ async function saveNotice() {
     const content = document.getElementById('content').value;
 
     try {
-        let response;
-
         if (createFlag) {
-            response = await axios.post('/api/v1/notice', {
+            let response = await axios.post('/api/v1/notice', {
                 title: title,
                 content: content,
                 writerEmail: 'test1@test.com'

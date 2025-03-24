@@ -45,6 +45,7 @@
                 <bind name="likeWriterEmail" value="'%' + writerEmail + '%'" />
                 AND writer_email LIKE #{likeWriterEmail, jdbcType=VARCHAR}
             </if>
+            AND delete_flag = FALSE
         </where>
         ORDER BY created_at DESC
         <if test="limit != null and limit != ''">
@@ -75,6 +76,7 @@
                 <bind name="likeWriterEmail" value="'%' + writerEmail + '%'" />
                 AND writer_email LIKE #{writerEmail, jdbcType=VARCHAR}
             </if>
+            AND delete_flag = FALSE
         </where>
     </select>
 
@@ -102,7 +104,7 @@
         parameterType="kr.co.samsami_service_desk.ticket.dto.InquiryRequestDto$DELETE"
     >
         UPDATE tbl_inquiry
-        SET delete_flag = FALSE
+        SET delete_flag = TRUE
         WHERE id = #{id, jdbcType=VARCHAR}
         AND writer_email = #{writerEmail, jdbcType=NUMERIC}
     </update>

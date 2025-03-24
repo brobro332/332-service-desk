@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body>
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fas fa-tags"></i>
+            티켓
+        </h1>
+        <div class="overflow-x-auto">
+            <form id="inquiryForm">
+                <div class="mb-4">
+                    <label for="title" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">제목</span></label>
+                    <input id="title" type="text" placeholder="제목을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="writerPhoneNumber" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">전화번호</span></label>
+                    <input id="writerPhoneNumber" type="text" placeholder="전화번호를 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="content" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">내용</span></label>
+                    <textarea id="content" placeholder="내용을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full min-h-90 border-gray-300"></textarea>
+                </div>
+                <div class="mb-4 flex justify-end">
+                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="redirectToPreviousPage()">
+                        뒤로가기
+                    </button>
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="createInquiry()">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+async function createInquiry() {
+    showLoadingSpinner();
+
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+    const writerPhoneNumber = document.getElementById('writerPhoneNumber').value;
+
+    try {
+        let response = await axios.post('/api/v1/ticket/inquiry', {
+            title: title,
+            content: content,
+            writerPhoneNumber: writerPhoneNumber,
+            writerEmail: 'test1@test.com'
+        });
+
+        window.location.href='/ticket/ticketList';
+    } catch (error) {
+        console.error(error);
+    } finally {
+        hideLoadingSpinner();
+    }
+}
+
+function redirectToPreviousPage() {
+    window.location.href='/ticket/ticketList';
+}
+</script>
+<div class="footer" th:replace="~{footer.html}"></div>
+</body>
+</html>

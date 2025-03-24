@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="flex space-x-15 mb-6">
-                    <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">작성자</span><span id="notice-author"></span></p>
+                    <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">작성자</span><span id="notice-writer"></span></p>
                     <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">등록일자</span><span id="notice-created-at"></span></p>
                     <p class="text-sm text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">수정일자</span><span id="notice-updated-at"></span></p>
                 </div>
@@ -69,7 +69,7 @@ async function loadNoticeInformation() {
         const notice = noticeList[0];
 
         document.getElementById("notice-title").textContent = notice.title;
-        document.getElementById("notice-author").textContent = notice.writerName;
+        document.getElementById("notice-writer").textContent = notice.writerName;
         document.getElementById("notice-created-at").textContent = notice.createdDate;
         document.getElementById("notice-updated-at").textContent = notice.updatedDate;
         document.getElementById("notice-content").textContent = notice.content;

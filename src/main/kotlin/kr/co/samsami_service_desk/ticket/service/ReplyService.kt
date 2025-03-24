@@ -22,9 +22,9 @@ class ReplyService(private val mapper: ReplyMapper) {
         }
     }
 
-    fun readReplyList(dto: ReplyRequestDto.READ): List<ReplyResponseDto> {
+    fun readReply(dto: ReplyRequestDto.READ): List<ReplyResponseDto> {
         try {
-            return mapper.readReplyList(dto)
+            return mapper.readReply(dto)
         } catch (e: Exception) {
             logger.error("답변 조회 중 오류 발생: ${e.message}", e)
             throw RuntimeException("답변 조회에 실패했습니다.")
