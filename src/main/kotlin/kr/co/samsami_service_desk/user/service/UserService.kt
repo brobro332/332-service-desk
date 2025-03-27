@@ -31,6 +31,15 @@ class UserService(private val mapper: UserMapper) {
         }
     }
 
+    fun countUserList(dto: UserRequestDto.READ): Long {
+        try {
+            return mapper.countUserList(dto)
+        } catch (e: Exception) {
+            logger.error("사용자 목록 건수 조회 중 오류 발생: ${e.message}", e)
+            throw RuntimeException(e)
+        }
+    }
+
     @Transactional
     fun updateUser(dto: UserRequestDto.UPDATE) {
         try {

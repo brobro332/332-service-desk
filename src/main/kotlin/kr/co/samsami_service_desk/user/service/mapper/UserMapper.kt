@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper
 interface UserMapper {
     fun createUser(dto: UserRequestDto.CREATE)
     fun readUserList(dto: UserRequestDto.READ): List<UserResponseDto>
+    fun countUserList(dto: UserRequestDto.READ): Long
     fun updateUser(dto: UserRequestDto.UPDATE)
     fun deleteUser(dto: UserRequestDto.DELETE)
 }

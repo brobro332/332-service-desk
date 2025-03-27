@@ -7,8 +7,8 @@ class UserResponseDto (
     @Schema(description = "행 번호")
     val rowNumber: Int,
 
-    @Schema(description = "작성자 이메일")
-    val writerEmail: String,
+    @Schema(description = "이메일")
+    val email: String,
 
     @Schema(description = "이름")
     val name: String,
@@ -18,6 +18,9 @@ class UserResponseDto (
 
     @Schema(description = "사용자 구분")
     val userDivision: String,
+
+    @Schema(description = "삭제 여부")
+    val deleteFlag: Boolean,
 
     @Schema(description = "등록일자")
     val createdDate: String,

@@ -30,6 +30,7 @@
                name,
                phone_number,
                user_division,
+               delete_flag,
                TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
                TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
         FROM tbl_user

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
+import kr.co.samsami_service_desk.common.dto.PagedResultDto
 import kr.co.samsami_service_desk.user.dto.UserRequestDto
 import kr.co.samsami_service_desk.user.dto.UserResponseDto
 import kr.co.samsami_service_desk.user.service.UserService
@@ -38,8 +39,8 @@ class UserApiController (private val service: UserService) {
             required = true,
             content = [Content(schema = Schema(implementation = UserRequestDto.READ::class))]
         )
-        @ModelAttribute dto: UserRequestDto.READ): CommonResponseDto<List<UserResponseDto>> {
-        return CommonResponseDto.ofSuccess("사용자 목록이 성공적으로 조회되었습니다.", service.readUserList(dto))
+        @ModelAttribute dto: UserRequestDto.READ): CommonResponseDto<PagedResultDto<List<UserResponseDto>>> {
+        return CommonResponseDto.ofSuccess("사용자 목록이 성공적으로 조회되었습니다.", PagedResultDto(service.countUserList(dto), service.readUserList(dto)))
     }
 
     @PutMapping
