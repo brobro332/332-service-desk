@@ -29,8 +29,18 @@
                email,
                name,
                phone_number,
-               agent_division,
-               delete_flag,
+               (
+                 CASE WHEN agent_division = 'ADMINISTRATOR' THEN '관리자'
+                      WHEN agent_division = 'COUNSELOR' THEN '상담사'
+                      ELSE '-'
+                 END
+               ) AS agent_division,
+               (
+                 CASE WHEN delete_flag THEN 'O'
+                      WHEN NOT delete_flag THEN 'X'
+                      ELSE '-'
+                 END
+               ) AS delete_flag,
                TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
                TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
         FROM tbl_agent
@@ -105,7 +115,7 @@
         parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$DELETE"
     >
         UPDATE tbl_agent
-        SET delete_flag = FALSE
+        SET delete_flag = TRUE
         WHERE email = #{email, jdbcType=NUMERIC}
     </update>
 </mapper>

@@ -14,9 +14,15 @@
         <div class="overflow-x-auto">
             <div class="flex items-center space-x-2 mb-4">
                 <label for="searchEmail"></label>
-                <input id="searchEmail" type="text" placeholder="이메일 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
+                <input id="searchEmail" type="text" placeholder="이메일 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/5 border-gray-300">
                 <label for="searchName"></label>
-                <input id="searchName" type="text" placeholder="이름 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
+                <input id="searchName" type="text" placeholder="이름 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/5 border-gray-300">
+                <label for="searchAgentDivision"></label>
+                <select id="searchAgentDivision" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/5 border-gray-300">
+                    <option value="" selected>전체</option>
+                    <option value="ADMINISTRATOR">관리자</option>
+                    <option value="COUNSELOR">상담사</option>
+                </select>
                 <button onclick="searchAgentList()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400">
                     검색
                 </button>
@@ -26,7 +32,10 @@
                 <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400" onclick="window.location.href='/agent/saveAgent';">
                     등록
                 </button>
-                <button id="toggle-delete-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400">
+                <button id="toggle-update-btn" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-400" onclick="toggleUpdateBtn();">
+                    수정
+                </button>
+                <button id="toggle-delete-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400" onclick="toggleDeleteBtn();">
                     삭제
                 </button>
             </div>
@@ -34,12 +43,12 @@
                 <thead>
                 <tr class="bg-blue-500 text-white">
                     <th class="px-4 py-2 w-1/12 border-r">번호</th>
-                    <th class="px-4 py-2 w-5/12 border-r">이메일</th>
-                    <th class="px-4 py-2 w-1/12 border-r">이름</th>
+                    <th class="px-4 py-2 w-2/12 border-r">이메일</th>
+                    <th class="px-4 py-2 w-2/12 border-r">이름</th>
                     <th class="px-4 py-2 w-2/12 border-r">에이전트구분</th>
                     <th class="px-4 py-2 w-1/12 border-r">삭제여부</th>
-                    <th class="px-4 py-2 w-1/12 border-r">등록일자</th>
-                    <th class="px-4 py-2 w-1/12">수정일자</th>
+                    <th class="px-4 py-2 w-2/12 border-r">등록일자</th>
+                    <th class="px-4 py-2 w-2/12">수정일자</th>
                 </tr>
                 </thead>
                 <tbody id="agent-table-body">
@@ -65,18 +74,20 @@ let count = 1;
 const limit = 10;
 
 window.onload = async function() {
-    await loadNoticeList(currentPage);
+    await loadAgentList(currentPage);
 };
 
-async function loadNoticeList(page) {
+async function loadAgentList(page) {
     try {
         const email = document.getElementById('searchEmail').value;
         const name = document.getElementById('searchName').value;
+        const agentDivision = document.getElementById('searchAgentDivision').value;
 
         const response = await axios.get('/api/v1/agent', {
             params: {
                 email: email,
                 name: name,
+                agentDivision: agentDivision,
                 limit: limit,
                 offset: 10 * (currentPage - 1)
             }
@@ -101,7 +112,10 @@ async function loadNoticeList(page) {
                 <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.deleteFlag}</td>
                 <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.createdDate}</td>
                 <td class="px-4 py-2 border-b border-gray-300 text-gray-700 text-center">${agent.updatedDate}</td>
-                <button class="delete-btn hide bg-red-500 text-white px-6 py-1 ml-3 mt-1 rounded hover:bg-red-400" style="white-space:nowrap;")">선택</button>
+                <div class="btn-wrapper">
+                    <button class="delete-btn hide bg-red-500 text-white px-6 py-1 ml-3 mt-1 rounded hover:bg-red-400" style="white-space:nowrap;" onclick="deleteAgent('${agent.email}');">선택</button>
+                    <button class="update-btn hide bg-purple-500 text-white px-6 py-1 ml-3 mt-1 rounded hover:bg-purple-400" style="white-space:nowrap;" onclick="window.location.href='/agent/saveAgent?email=' + encodeURIComponent('${agent.email}');">선택</button>
+                </div>
             `;
 
             tableBody.appendChild(row);
@@ -116,23 +130,21 @@ async function loadNoticeList(page) {
     }
 };
 
-function searchNoticeList() {
+function searchAgentList() {
     currentPage = 1;
-    loadNoticeList(currentPage);
+    loadAgentList(currentPage);
 }
 
-async function deleteNotice(email) {
+async function deleteAgent(email) {
     try {
         showLoadingSpinner();
 
-        const response = await axios.delete('/api/v1/agent', {
-            data: {
-                email: email
-            }
+        const response = await axios.patch('/api/v1/agent', {
+            email: email
         });
 
         if (count > 1 && count % 10 == 1) currentPage--;
-        await loadNoticeList(currentPage);
+        await loadAgentList(currentPage);
 
         const toggleDeleteButton = document.getElementById('toggle-delete-btn');
         const deleteBtns = document.querySelectorAll('.delete-btn');
@@ -156,6 +168,7 @@ async function deleteNotice(email) {
 function toggleDeleteBtn() {
     const toggleDeleteButton = document.getElementById('toggle-delete-btn');
     const deleteBtns = document.querySelectorAll('.delete-btn');
+    const updateBtns = document.querySelectorAll('.update-btn');
 
     if (toggleDeleteButton.innerText === "삭제") {
         toggleDeleteButton.innerText = "취소";
@@ -171,8 +184,48 @@ function toggleDeleteBtn() {
         toggleDeleteButton.classList.add("hover:bg-red-400");
     }
 
+    updateBtns.forEach(btn => {
+        btn.style.display = "none";
+    });
+
     deleteBtns.forEach(btn => {
         btn.classList.toggle('hide');
+    });
+
+    updateBtns.forEach(btn => {
+        btn.style.display = "block";
+    });
+}
+
+function toggleUpdateBtn() {
+    const toggleUpdateButton = document.getElementById('toggle-update-btn');
+    const updateBtns = document.querySelectorAll('.update-btn');
+    const deleteBtns = document.querySelectorAll('.delete-btn');
+
+    if (toggleUpdateButton.innerText === "수정") {
+        toggleUpdateButton.innerText = "취소";
+        toggleUpdateButton.classList.remove("bg-purple-500");
+        toggleUpdateButton.classList.remove("hover:bg-purple-400");
+        toggleUpdateButton.classList.add("bg-purple-600");
+        toggleUpdateButton.classList.add("hover:bg-purple-500");
+    } else {
+        toggleUpdateButton.innerText = "수정";
+        toggleUpdateButton.classList.remove("bg-purple-600");
+        toggleUpdateButton.classList.remove("hover:bg-purple-500");
+        toggleUpdateButton.classList.add("bg-purple-500");
+        toggleUpdateButton.classList.add("hover:bg-purple-400");
+    }
+
+    deleteBtns.forEach(btn => {
+        btn.style.display = "none";
+    });
+
+    updateBtns.forEach(btn => {
+        btn.classList.toggle('hide');
+    });
+
+    deleteBtns.forEach(btn => {
+        btn.style.display = "block";
     });
 }
 
@@ -194,13 +247,13 @@ function createPaginationButtons() {
 function moveToPage(page) {
     if (page < 1 || page > count) return;
     currentPage = page;
-    loadNoticeList(currentPage);
+    loadAgentList(currentPage);
 }
 
-document.querySelectorAll('#searchTitle, #searchContent').forEach(input => {
+document.querySelectorAll('#searchEmail, #searchName').forEach(input => {
     input.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
-            searchNoticeList();
+            searchAgentList();
         }
     });
 });

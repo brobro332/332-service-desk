@@ -4,7 +4,7 @@ CREATE TABLE tbl_agent (
     name VARCHAR(20) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
     agent_division VARCHAR(15) NOT NULL,
-    delete_flag BOOLEAN DEFAULT TRUE NOT NULL,
+    delete_flag BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

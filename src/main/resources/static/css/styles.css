@@ -22,17 +22,43 @@ tr:hover td {
     background-color: #f1f5f9;
 }
 
-.delete-btn {
+.btn-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.delete-btn,
+.update-btn {
+    position: relative;
     padding-x: 24px;
     padding-y: 4px;
     overflow: hidden;
-    transition: height 0.5s ease, padding 0.5s ease; /* 부드럽게 크기와 패딩 변화 */
+    transition: height 0.5s ease, padding 0.5s ease;
 }
 
-.delete-btn.hide {
+.delete-btn.hide,
+.update-btn.hide {
     width: 0;
     height: 0;
     padding: 0;
+}
+
+.delete-btn {
+    z-index: 2;
+}
+
+.update-btn {
+    z-index: 1;
+}
+
+.delete-btn.hide {
+    opacity: 0;
+    z-index: 1;
+}
+
+.update-btn.hide {
+    opacity: 1;
+    z-index: 2;
 }
 
 /* 로딩 스피너 */
@@ -61,4 +87,13 @@ tr:hover td {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* 기본 선택된 옵션 회색 표시 */
+select:invalid {
+    color: gray;
+}
+
+option {
+    color: #000;
 }

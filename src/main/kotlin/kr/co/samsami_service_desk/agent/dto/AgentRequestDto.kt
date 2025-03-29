@@ -23,7 +23,7 @@ class AgentRequestDto {
         val phoneNumber: String,
 
         @Schema(description = "에이전트 구분")
-        val agentDivision: AgentDivision
+        val agentDivision: String
     )
 
     @Schema(
@@ -38,7 +38,7 @@ class AgentRequestDto {
         val name: String? = null,
 
         @Schema(description = "에이전트 구분")
-        val agentDivision: AgentDivision? = null,
+        val agentDivision: String? = null,
 
         @Schema(description = "반환 행 수")
         val limit: Int? = null,
@@ -65,7 +65,7 @@ class AgentRequestDto {
         val phoneNumber: String? = null,
 
         @Schema(description = "에이전트 구분")
-        val agentDivision: AgentDivision? = null
+        val agentDivision: String? = null
     )
 
     @Schema(

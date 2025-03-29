@@ -17,10 +17,10 @@ class AgentResponseDto (
     val phoneNumber: String,
 
     @Schema(description = "에이전트 구분")
-    val userDivision: String,
+    val agentDivision: String,
 
     @Schema(description = "삭제 여부")
-    val deleteFlag: Boolean,
+    val deleteFlag: String,
 
     @Schema(description = "등록일자")
     val createdDate: String,
