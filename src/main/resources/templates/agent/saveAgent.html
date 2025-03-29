@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{head.html}"></div>
+</head>
+<body>
+<div class="header" th:replace="~{header.html}"></div>
+<div class="container min-w-full">
+    <div class="divide-y divide-gray-300">
+        <h1 class="pb-4 mb-4 text-xl font-bold">
+            <i class="fa fa-agent"></i>
+            에이전트
+        </h1>
+        <div class="overflow-x-auto">
+            <form id="agentForm">
+                <div class="mb-4">
+                    <label for="email" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">이메일</span></label>
+                    <input id="email" type="text" placeholder="이메일을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">비밀번호</span></label>
+                    <input id="password" type="text" placeholder="비밀번호를 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="name" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">이름</span></label>
+                    <input id="name" type="text" placeholder="이름을 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="phoneNumber" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">전화번호</span></label>
+                    <input id="phoneNumber" type="text" placeholder="전화번호를 입력하세요." class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-full border-gray-300">
+                </div>
+                <div class="mb-4">
+                    <label for="agentDivision" class="mb-2 block font-bold text-gray-700"><span class="bg-blue-500 text-white px-3 py-1 mr-2 rounded-full text-sm">에이전트구분</span></label>
+                        <select id="agentDivision" class="block w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+                            <option value="" disabled selected>에이전트구분을 선택하세요.</option>
+                            <option value="ADMINISTRATOR">관리자</option>
+                            <option value="COUNSELOR">상담사</option>
+                        </select>
+                </div>
+                <div class="mb-4 flex justify-end">
+                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400" onclick="window.location.href='/agent/agentList';">
+                        뒤로가기
+                    </button>
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400" onclick="saveAgent()">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        const email = new URLSearchParams(window.location.search).get('email');
+        let createFlag = true;
+
+        window.onload = async function() {
+            if (id) {
+                createFlag = false;
+                await loadAgentInformation(id);
+            }
+        };
+
+        async function loadAgentInformation(id) {
+            try {
+                if (!id) {
+                    showErrorMessage("잘못된 접근입니다. 사용자를 찾을 수 없습니다.");
+                    return;
+                }
+
+                const response = await axios.get('/api/v1/agent', {
+                    params: { id: id }
+                });
+
+                const agentList = response.data.data.list;
+                if (!agentList || agentList.length === 0) {
+                    showErrorMessage("해당 사용자를 찾을 수 없습니다.");
+                    return;
+                }
+
+                const agent = agentList[0];
+
+                document.getElementById("email").value = agent.email;
+                document.getElementById("password").textContent = agent.password;
+                document.getElementById("name").value = agent.name;
+                document.getElementById("phoneNumber").value = agent.phoneNumber;
+                document.getElementById("agentDivision").value = agent.agentDivision;
+            } catch (error) {
+                console.error(error);
+                showErrorMessage("사용자 정보를 불러오는 데 실패했습니다.");
+            }
+        }
+
+        async function saveAgent() {
+            showLoadingSpinner();
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+
+            try {
+                if (createFlag) {
+                    let response = await axios.post('/api/v1/agent', {
+                        title: title,
+                        content: content,
+                        writerEmail: 'test1@test.com'
+                    });
+                } else {
+                    if (!id) {
+                        showErrorMessage("잘못된 접근입니다. 공지사항을 찾을 수 없습니다.");
+                        return;
+                    }
+
+                    response = await axios.put('/api/v1/agent', {
+                        id: id,
+                        title: title,
+                        content: content
+                    });
+                }
+
+                window.location.href='/agent/agentList';
+            } catch (error) {
+                console.error(error);
+            } finally {
+                hideLoadingSpinner();
+            }
+        }
+    </script>
+</div>
+<div class="footer" th:replace="~{footer.html}"></div>
+</body>
+</html>

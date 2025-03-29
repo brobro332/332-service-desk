@@ -21,10 +21,4 @@ class AgentController {
     fun showSaveAgentPage(): String {
         return "/agent/saveAgent"
     }
-
-    @Operation(summary = "에이전트 정보 페이지", description = "에이전트 정보 페이지를 반환합니다.")
-    @GetMapping("/agentInformation")
-    fun showAgentInformationPage(): String {
-        return "/agent/agentInformation"
-    }
 }

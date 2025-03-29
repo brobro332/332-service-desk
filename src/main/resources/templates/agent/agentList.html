@@ -8,8 +8,8 @@
 <div class="container min-w-full">
     <div class="divide-y divide-gray-300">
         <h1 class="pb-4 mb-4 text-xl font-bold">
-            <i class="fa fa-user"></i>
-            사용자
+            <i class="fa fa-agent"></i>
+            에이전트
         </h1>
         <div class="overflow-x-auto">
             <div class="flex items-center space-x-2 mb-4">
@@ -17,13 +17,13 @@
                 <input id="searchEmail" type="text" placeholder="이메일 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
                 <label for="searchName"></label>
                 <input id="searchName" type="text" placeholder="이름 입력" class="border rounded-md px-4 py-2 focus:ring focus:ring-blue-300 w-1/3 border-gray-300">
-                <button onclick="searchUserList()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400">
+                <button onclick="searchAgentList()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400">
                     검색
                 </button>
 
                 <div class="flex-grow"></div>
 
-                <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400" onclick="window.location.href='/agent/saveAgent';">
                     등록
                 </button>
                 <button id="toggle-delete-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400">
@@ -33,16 +33,16 @@
             <table class="min-w-full table-fixed border-collapse bg-white overflow-hidden transition-all duration-500 ease-in-out">
                 <thead>
                 <tr class="bg-blue-500 text-white">
-                    <th class="px-4 py-2 w-1/21 border-r">번호</th>
-                    <th class="px-4 py-2 w-10/21 border-r">이메일</th>
-                    <th class="px-4 py-2 w-2/21 border-r">이름</th>
-                    <th class="px-4 py-2 w-2/21 border-r">사용자구분</th>
-                    <th class="px-4 py-2 w-2/21 border-r">삭제여부</th>
-                    <th class="px-4 py-2 w-2/21 border-r">등록일자</th>
-                    <th class="px-4 py-2 w-2/21">수정일자</th>
+                    <th class="px-4 py-2 w-1/12 border-r">번호</th>
+                    <th class="px-4 py-2 w-5/12 border-r">이메일</th>
+                    <th class="px-4 py-2 w-1/12 border-r">이름</th>
+                    <th class="px-4 py-2 w-2/12 border-r">에이전트구분</th>
+                    <th class="px-4 py-2 w-1/12 border-r">삭제여부</th>
+                    <th class="px-4 py-2 w-1/12 border-r">등록일자</th>
+                    <th class="px-4 py-2 w-1/12">수정일자</th>
                 </tr>
                 </thead>
-                <tbody id="user-table-body">
+                <tbody id="agent-table-body">
                 </tbody>
             </table>
             <div class="mt-4 flex justify-center">
@@ -73,7 +73,7 @@ async function loadNoticeList(page) {
         const email = document.getElementById('searchEmail').value;
         const name = document.getElementById('searchName').value;
 
-        const response = await axios.get('/api/v1/user', {
+        const response = await axios.get('/api/v1/agent', {
             params: {
                 email: email,
                 name: name,
@@ -83,26 +83,24 @@ async function loadNoticeList(page) {
         });
 
         count = response.data.data.count;
-        const userList = response.data.data.list;
-        const tableBody = document.getElementById('user-table-body');
+        const agentList = response.data.data.list;
+        const tableBody = document.getElementById('agent-table-body');
 
         tableBody.innerHTML = '';
 
-        userList.forEach((user, index) => {
+        agentList.forEach((agent, index) => {
             const row = document.createElement('tr');
-            row.id = `row-${user.email}`;
+            row.id = `row-${agent.email}`;
             row.classList.add('transition-opacity', 'duration-300');
 
             row.innerHTML = `
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${user.rowNumber}</td>
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 font-bold">
-                    ${user.email}
-                </td>
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${user.name}</td>
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${user.userDivision}</td>
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${user.deleteFlag}</td>
-                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${user.createdDate}</td>
-                <td class="px-4 py-2 border-b border-gray-300 text-gray-700 text-center">${user.updatedDate}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.rowNumber}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 font-bold">${agent.email}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.name}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.agentDivision}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.deleteFlag}</td>
+                <td class="px-4 py-2 border-r border-b border-gray-300 text-gray-700 text-center">${agent.createdDate}</td>
+                <td class="px-4 py-2 border-b border-gray-300 text-gray-700 text-center">${agent.updatedDate}</td>
                 <button class="delete-btn hide bg-red-500 text-white px-6 py-1 ml-3 mt-1 rounded hover:bg-red-400" style="white-space:nowrap;")">선택</button>
             `;
 
@@ -127,7 +125,7 @@ async function deleteNotice(email) {
     try {
         showLoadingSpinner();
 
-        const response = await axios.delete('/api/v1/user', {
+        const response = await axios.delete('/api/v1/agent', {
             data: {
                 email: email
             }
