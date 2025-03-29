@@ -1,9 +1,9 @@
-package kr.co.samsami_service_desk.user.dto
+package kr.co.samsami_service_desk.agent.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(description = "사용자 목록 조회 응답 DTO")
-class UserResponseDto (
+@Schema(description = "에이전트 목록 조회 응답 DTO")
+class AgentResponseDto (
     @Schema(description = "행 번호")
     val rowNumber: Int,
 
@@ -16,7 +16,7 @@ class UserResponseDto (
     @Schema(description = "전화번호")
     val phoneNumber: String,
 
-    @Schema(description = "사용자 구분")
+    @Schema(description = "에이전트 구분")
     val userDivision: String,
 
     @Schema(description = "삭제 여부")

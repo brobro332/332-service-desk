@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.samsami_service_desk.user.service.mapper.UserMapper">
+<mapper namespace="kr.co.samsami_service_desk.agent.service.mapper.AgentMapper">
     <insert
-        id="createUser"
-        parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$CREATE"
+        id="createAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$CREATE"
     >
-        INSERT INTO tbl_user (
+        INSERT INTO tbl_agent (
             email,
             password,
             name,
             phone_number,
-            user_division
+            agent_division
         ) VALUES (
             #{email, jdbcType=VARCHAR},
             #{password, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
             #{phoneNumber, jdbcType=VARCHAR},
-            #{userDivision, jdbcType=VARCHAR}
+            #{agentDivision, jdbcType=VARCHAR}
         )
     </insert>
 
     <select
-        id="readUserList"
-        parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$READ"
-        resultType="kr.co.samsami_service_desk.user.dto.UserResponseDto"
+        id="readAgentList"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$READ"
+        resultType="kr.co.samsami_service_desk.agent.dto.AgentResponseDto"
     >
         SELECT ROW_NUMBER() OVER (ORDER BY created_at) AS row_number,
                email,
                name,
                phone_number,
-               user_division,
+               agent_division,
                delete_flag,
                TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
                TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
-        FROM tbl_user
+        FROM tbl_agent
         <where>
             <if test="email != null and email != ''">
                 <bind name="likeEmail" value="'%' + email + '%'" />
@@ -43,8 +43,8 @@
                 <bind name="likeName" value="'%' + name + '%'" />
                 AND name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
-            <if test="userDivision != null and userDivision != ''">
-                AND user_division = #{userDivision, jdbcType=VARCHAR}
+            <if test="agentDivision != null and agentDivision != ''">
+                AND agent_division = #{agentDivision, jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY created_at DESC
@@ -57,12 +57,12 @@
     </select>
 
     <select
-            id="countUserList"
-            parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$READ"
+            id="countAgentList"
+            parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$READ"
             resultType="long"
     >
         SELECT COUNT(1)
-        FROM tbl_user
+        FROM tbl_agent
         <where>
             <if test="email != null and email != ''">
                 <bind name="likeEmail" value="'%' + email + '%'" />
@@ -72,17 +72,17 @@
                 <bind name="likeName" value="'%' + name + '%'" />
                 AND name LIKE #{likeName, jdbcType=VARCHAR}
             </if>
-            <if test="userDivision != null and userDivision != ''">
-                AND user_division = #{userDivision, jdbcType=VARCHAR}
+            <if test="agentDivision != null and agentDivision != ''">
+                AND agent_division = #{agentDivision, jdbcType=VARCHAR}
             </if>
         </where>
     </select>
 
     <update
-        id="updateUser"
-        parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$UPDATE"
+        id="updateAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$UPDATE"
     >
-        UPDATE tbl_user
+        UPDATE tbl_agent
         SET
         <if test="password != null and password != ''">
             password = #{password, jdbcType=VARCHAR},
@@ -93,18 +93,18 @@
         <if test="phoneNumber != null and phoneNumber != ''">
             phone_number = #{phoneNumber, jdbcType=VARCHAR},
         </if>
-        <if test="userDivision != null and userDivision != ''">
-            user_division = #{userDivision, jdbcType=VARCHAR},
+        <if test="agentDivision != null and agentDivision != ''">
+            agent_division = #{agentDivision, jdbcType=VARCHAR},
         </if>
             updated_at = CURRENT_TIMESTAMP
         WHERE email = #{email, jdbcType=NUMERIC}
     </update>
 
     <update
-        id="deleteUser"
-        parameterType="kr.co.samsami_service_desk.user.dto.UserRequestDto$DELETE"
+        id="deleteAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$DELETE"
     >
-        UPDATE tbl_user
+        UPDATE tbl_agent
         SET delete_flag = FALSE
         WHERE email = #{email, jdbcType=NUMERIC}
     </update>
