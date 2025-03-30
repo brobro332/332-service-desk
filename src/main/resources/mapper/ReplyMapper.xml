@@ -1,0 +1,70 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.samsami_service_desk.ticket.service.mapper.ReplyMapper">
+    <!-- 답변 등록 -->
+    <insert
+        id="createReply"
+        parameterType="kr.co.samsami_service_desk.ticket.dto.ReplyRequestDto$CREATE"
+    >
+        INSERT INTO tbl_reply (
+            inquiry_id,
+            inquiry_writer_email,
+            title,
+            content,
+            writer_email
+        ) VALUES (
+            #{inquiryId, jdbcType=NUMERIC},
+            #{inquiryWriterEmail, jdbcType=VARCHAR},
+            #{title, jdbcType=VARCHAR},
+            #{content, jdbcType=VARCHAR},
+            #{writerEmail, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 답변 조회 -->
+    <select
+        id="readReply"
+        parameterType="kr.co.samsami_service_desk.ticket.dto.ReplyRequestDto$READ"
+        resultType="kr.co.samsami_service_desk.ticket.dto.ReplyResponseDto"
+    >
+        SELECT id,
+               inquiry_id,
+               inquiry_writer_email,
+               writer_email,
+               title,
+               content,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+        FROM tbl_reply
+        WHERE inquiry_id = #{inquiryId, jdbcType=NUMERIC}
+        AND inquiry_writer_email = #{inquiryWriterEmail, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 답변 수정 -->
+    <update
+        id="updateReply"
+        parameterType="kr.co.samsami_service_desk.ticket.dto.ReplyRequestDto$UPDATE"
+    >
+        UPDATE tbl_reply
+        SET
+        <if test="title != null and title != ''">
+            title = #{title, jdbcType=VARCHAR},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content, jdbcType=VARCHAR}
+        </if>
+        WHERE inquiry_id = #{inquiryId, jdbcType=NUMERIC}
+        AND inquiry_writer_email = #{inquiryWriterEmail, jdbcType=VARCHAR}
+    </update>
+
+    <!-- 답변 삭제 -->
+    <update
+        id="deleteReply"
+        parameterType="kr.co.samsami_service_desk.ticket.dto.ReplyRequestDto$DELETE"
+    >
+        UPDATE tbl_reply
+        SET delete_flag = FALSE
+        WHERE inquiry_id = #{inquiryId, jdbcType=NUMERIC}
+        AND inquiry_writer_email = #{inquiryWriterEmail, jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.samsami_service_desk.notice.service.mapper.NoticeMapper">
-    <insert id="createNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE">
+    <!-- 공지사항 등록 -->
+    <insert
+        id="createNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$CREATE"
+    >
         INSERT INTO tbl_notice (
             title,
             content,
@@ -72,7 +76,11 @@
         </where>
     </select>
 
-    <update id="updateNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$UPDATE">
+    <!-- 공지사항 수정 -->
+    <update
+        id="updateNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$UPDATE"
+    >
         UPDATE tbl_notice
         SET
         <if test="title != null and title != ''">
@@ -84,7 +92,11 @@
         WHERE id = #{id, jdbcType=NUMERIC}
     </update>
 
-    <delete id="deleteNotice" parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$DELETE">
+    <!-- 공지사항 삭제 -->
+    <delete
+        id="deleteNotice"
+        parameterType="kr.co.samsami_service_desk.notice.dto.NoticeRequestDto$DELETE"
+    >
         DELETE
         FROM tbl_notice
         WHERE id = #{id, jdbcType=NUMERIC}

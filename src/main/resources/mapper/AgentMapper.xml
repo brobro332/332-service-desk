@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.samsami_service_desk.agent.service.mapper.AgentMapper">
+    <!-- 에이전트 등록 -->
+    <insert
+        id="createAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$CREATE"
+    >
+        INSERT INTO tbl_agent (
+            email,
+            password,
+            name,
+            phone_number,
+            agent_division
+        ) VALUES (
+            #{email, jdbcType=VARCHAR},
+            #{password, jdbcType=VARCHAR},
+            #{name, jdbcType=VARCHAR},
+            #{phoneNumber, jdbcType=VARCHAR},
+            #{agentDivision, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 에이전트 목록 조회 -->
+    <select
+        id="readAgentList"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$READ"
+        resultType="kr.co.samsami_service_desk.agent.dto.AgentResponseDto"
+    >
+        SELECT ROW_NUMBER() OVER (ORDER BY created_at) AS row_number,
+               email,
+               name,
+               phone_number,
+               (
+                 CASE WHEN agent_division = 'ADMINISTRATOR' THEN '관리자'
+                      WHEN agent_division = 'COUNSELOR' THEN '상담사'
+                      ELSE '-'
+                 END
+               ) AS agent_division,
+               (
+                 CASE WHEN delete_flag THEN 'O'
+                      WHEN NOT delete_flag THEN 'X'
+                      ELSE '-'
+                 END
+               ) AS delete_flag,
+               TO_CHAR(created_at, 'YYYY-MM-DD') AS created_date,
+               TO_CHAR(updated_at, 'YYYY-MM-DD') AS updated_date
+        FROM tbl_agent
+        <where>
+            <if test="email != null and email != ''">
+                <bind name="likeEmail" value="'%' + email + '%'" />
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + name + '%'" />
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
+            </if>
+            <if test="agentDivision != null and agentDivision != ''">
+                AND agent_division = #{agentDivision, jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+        <if test="limit != null and limit != ''">
+            LIMIT #{limit}
+        </if>
+        <if test="offset != null and offset != ''">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <!-- 에이전트 목록 개수 조회 -->
+    <select
+            id="countAgentList"
+            parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$READ"
+            resultType="long"
+    >
+        SELECT COUNT(1)
+        FROM tbl_agent
+        <where>
+            <if test="email != null and email != ''">
+                <bind name="likeEmail" value="'%' + email + '%'" />
+                AND email LIKE #{likeEmail, jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="likeName" value="'%' + name + '%'" />
+                AND name LIKE #{likeName, jdbcType=VARCHAR}
+            </if>
+            <if test="agentDivision != null and agentDivision != ''">
+                AND agent_division = #{agentDivision, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!-- 에이전트 수정 -->
+    <update
+        id="updateAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$UPDATE"
+    >
+        UPDATE tbl_agent
+        SET
+        <if test="password != null and password != ''">
+            password = #{password, jdbcType=VARCHAR},
+        </if>
+        <if test="name != null and name != ''">
+            name = #{name, jdbcType=VARCHAR},
+        </if>
+        <if test="phoneNumber != null and phoneNumber != ''">
+            phone_number = #{phoneNumber, jdbcType=VARCHAR},
+        </if>
+        <if test="agentDivision != null and agentDivision != ''">
+            agent_division = #{agentDivision, jdbcType=VARCHAR},
+        </if>
+            updated_at = CURRENT_TIMESTAMP
+        WHERE email = #{email, jdbcType=NUMERIC}
+    </update>
+
+    <!-- 에이전트 삭제 -->
+    <update
+        id="deleteAgent"
+        parameterType="kr.co.samsami_service_desk.agent.dto.AgentRequestDto$DELETE"
+    >
+        UPDATE tbl_agent
+        SET delete_flag = TRUE
+        WHERE email = #{email, jdbcType=NUMERIC}
+    </update>
+</mapper>

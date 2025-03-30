@@ -1,0 +1,10 @@
+CREATE TABLE tbl_agent (
+    email VARCHAR(100) PRIMARY KEY,
+    password VARCHAR(100) NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    agent_division VARCHAR(15) NOT NULL,
+    delete_flag BOOLEAN DEFAULT FALSE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

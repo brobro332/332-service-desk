@@ -4,18 +4,15 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
+import kr.co.samsami_service_desk.common.`object`.PagedResult
 import kr.co.samsami_service_desk.notice.dto.NoticeRequestDto
 import kr.co.samsami_service_desk.notice.dto.NoticeResponseDto
 import kr.co.samsami_service_desk.notice.service.NoticeService
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+@Tag(name = "Notice", description = "공지사항 API")
 @RestController
 @RequestMapping("/api/v1/notice")
 class NoticeApiController(private val service: NoticeService) {
@@ -42,8 +39,8 @@ class NoticeApiController(private val service: NoticeService) {
             required = true,
             content = [Content(schema = Schema(implementation = NoticeRequestDto.READ::class))]
         )
-        @RequestBody dto: NoticeRequestDto.READ): CommonResponseDto<List<NoticeResponseDto>> {
-        return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", service.readNoticeList(dto))
+        @ModelAttribute dto: NoticeRequestDto.READ): CommonResponseDto<PagedResult<List<NoticeResponseDto>>> {
+        return CommonResponseDto.ofSuccess("공지사항 목록이 성공적으로 조회되었습니다.", PagedResult(service.countNoticeList(dto), service.readNoticeList(dto)))
     }
 
     @PutMapping
