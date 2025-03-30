@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthenticationService(private val mapper: AuthenticationMapper): UserDetailsService {
+    /**
+     * 로그인 성공 시 인증 에이전트 반환
+     */
     override fun loadUserByUsername(email: String): UserDetails {
         val principal = mapper.selectAgentByEmail(email)
             ?: throw UsernameNotFoundException("해당 에이전트를 찾을 수 없습니다.")

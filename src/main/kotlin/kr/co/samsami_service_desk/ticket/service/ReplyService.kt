@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional
 class ReplyService(private val mapper: ReplyMapper) {
     private val logger: Logger = LoggerFactory.getLogger(ReplyService::class.java)
 
+    /**
+     * 답변 등록
+     */
     @Transactional
     fun createReply(dto: ReplyRequestDto.CREATE) {
         try {
@@ -22,6 +25,9 @@ class ReplyService(private val mapper: ReplyMapper) {
         }
     }
 
+    /**
+     * 답변 조회
+     */
     fun readReply(dto: ReplyRequestDto.READ): List<ReplyResponseDto> {
         try {
             return mapper.readReply(dto)
@@ -31,6 +37,9 @@ class ReplyService(private val mapper: ReplyMapper) {
         }
     }
 
+    /**
+     * 답변 수정
+     */
     @Transactional
     fun updateReply(dto: ReplyRequestDto.UPDATE) {
         try {
@@ -41,6 +50,9 @@ class ReplyService(private val mapper: ReplyMapper) {
         }
     }
 
+    /**
+     * 답변 삭제
+     */
     @Transactional
     fun deleteReply(dto: ReplyRequestDto.DELETE) {
         try {

@@ -16,6 +16,9 @@ class AgentService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AgentService::class.java)
 
+    /**
+     * 에이전트 등록
+     */
     @Transactional
     fun createAgent(dto: AgentRequestDto.CREATE) {
         try {
@@ -27,6 +30,9 @@ class AgentService(
         }
     }
 
+    /**
+     * 에이전트 목록 조회
+     */
     fun readAgentList(dto: AgentRequestDto.READ): List<AgentResponseDto> {
         try {
             return mapper.readAgentList(dto)
@@ -36,6 +42,9 @@ class AgentService(
         }
     }
 
+    /**
+     * 에이전트 목록 개수 조회
+     */
     fun countAgentList(dto: AgentRequestDto.READ): Long {
         try {
             return mapper.countAgentList(dto)
@@ -45,6 +54,9 @@ class AgentService(
         }
     }
 
+    /**
+     * 에이전트 수정
+     */
     @Transactional
     fun updateAgent(dto: AgentRequestDto.UPDATE) {
         try {
@@ -56,6 +68,9 @@ class AgentService(
         }
     }
 
+    /**
+     * 에이전트 삭제
+     */
     @Transactional
     fun deleteAgent(dto: AgentRequestDto.DELETE) {
         try {

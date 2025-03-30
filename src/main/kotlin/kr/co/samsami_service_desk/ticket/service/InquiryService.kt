@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional
 class InquiryService(private val mapper: InquiryMapper) {
     private val logger: Logger = LoggerFactory.getLogger(InquiryService::class.java)
 
+    /**
+     * 문의 등록
+     */
     @Transactional
     fun createInquiry(dto: InquiryRequestDto.CREATE) {
         try {
@@ -23,6 +26,9 @@ class InquiryService(private val mapper: InquiryMapper) {
         }
     }
 
+    /**
+     * 문의 목록 조회
+     */
     fun readInquiryList(dto: InquiryRequestDto.READ): List<InquiryResponseDto> {
         try {
             return mapper.readInquiryList(dto)
@@ -32,6 +38,9 @@ class InquiryService(private val mapper: InquiryMapper) {
         }
     }
 
+    /**
+     * 문의 목록 개수 조회
+     */
     fun countInquiryList(dto: InquiryRequestDto.READ): Long {
         try {
             return mapper.countInquiryList(dto)
@@ -41,6 +50,9 @@ class InquiryService(private val mapper: InquiryMapper) {
         }
     }
 
+    /**
+     * 문의 수정
+     */
     @Transactional
     fun updateInquiry(dto: InquiryRequestDto.UPDATE) {
         try {
@@ -51,6 +63,9 @@ class InquiryService(private val mapper: InquiryMapper) {
         }
     }
 
+    /**
+     * 문의 삭제
+     */
     @Transactional
     fun deleteInquiry(dto: InquiryRequestDto.DELETE) {
         try {
