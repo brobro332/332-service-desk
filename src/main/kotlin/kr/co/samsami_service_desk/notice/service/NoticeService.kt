@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional
 class NoticeService(private val mapper: NoticeMapper) {
     private val logger: Logger = LoggerFactory.getLogger(NoticeService::class.java)
 
+    /**
+     * 공지사항 등록
+     */
     @Transactional
     fun createNotice(dto: NoticeRequestDto.CREATE) {
         try {
@@ -22,6 +25,9 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
+    /**
+     * 공지사항 목록 조회
+     */
     fun readNoticeList(dto: NoticeRequestDto.READ): List<NoticeResponseDto> {
         try {
             return mapper.readNoticeList(dto)
@@ -31,6 +37,9 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
+    /**
+     * 공지사항 목록 개수 조회
+     */
     fun countNoticeList(dto: NoticeRequestDto.READ): Long {
         try {
             return mapper.countNoticeList(dto)
@@ -40,6 +49,9 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
+    /**
+     * 공지사항 수정
+     */
     @Transactional
     fun updateNotice(dto: NoticeRequestDto.UPDATE) {
         try {
@@ -50,6 +62,9 @@ class NoticeService(private val mapper: NoticeMapper) {
         }
     }
 
+    /**
+     * 공지사항 삭제
+     */
     @Transactional
     fun deleteNotice(dto: NoticeRequestDto.DELETE) {
         try {

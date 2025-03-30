@@ -9,12 +9,12 @@ class AgentRequestDto {
         name = "createUserDto",
         description = "에이전트 등록 요청"
     )
-    class CREATE (
+    data class CREATE (
         @Schema(description = "이메일")
         val email: String,
 
         @Schema(description = "비밀번호")
-        val password: String,
+        var password: String,
 
         @Schema(description = "이름")
         val name: String,
@@ -51,12 +51,12 @@ class AgentRequestDto {
         name = "updateUserDto",
         description = "에이전트 정보 수정 요청"
     )
-    class UPDATE (
+    data class UPDATE (
         @Schema(description = "이메일")
         val email: String,
 
         @Schema(description = "비밀번호")
-        val password: String? = null,
+        var password: String? = null,
 
         @Schema(description = "이름")
         val name: String? = null,

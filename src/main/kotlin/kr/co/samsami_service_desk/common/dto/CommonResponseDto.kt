@@ -1,8 +1,16 @@
 package kr.co.samsami_service_desk.common.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(description = "공통 응답 DTO")
 class CommonResponseDto<T>(
+    @Schema(description = "결과 코드")
     val resultCode: String,
+
+    @Schema(description = "메시지")
     val message: String?,
+
+    @Schema(description = "데이터")
     val data: T?
 ) {
     companion object {
