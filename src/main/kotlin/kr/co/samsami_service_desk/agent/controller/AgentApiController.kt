@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.samsami_service_desk.common.dto.CommonResponseDto
-import kr.co.samsami_service_desk.common.dto.PagedResultDto
+import kr.co.samsami_service_desk.common.`object`.PagedResult
 import kr.co.samsami_service_desk.agent.dto.AgentRequestDto
 import kr.co.samsami_service_desk.agent.dto.AgentResponseDto
 import kr.co.samsami_service_desk.agent.service.AgentService
@@ -39,8 +39,8 @@ class AgentApiController (private val service: AgentService) {
             required = true,
             content = [Content(schema = Schema(implementation = AgentRequestDto.READ::class))]
         )
-        @ModelAttribute dto: AgentRequestDto.READ): CommonResponseDto<PagedResultDto<List<AgentResponseDto>>> {
-        return CommonResponseDto.ofSuccess("에이전트 목록이 성공적으로 조회되었습니다.", PagedResultDto(service.countAgentList(dto), service.readAgentList(dto)))
+        @ModelAttribute dto: AgentRequestDto.READ): CommonResponseDto<PagedResult<List<AgentResponseDto>>> {
+        return CommonResponseDto.ofSuccess("에이전트 목록이 성공적으로 조회되었습니다.", PagedResult(service.countAgentList(dto), service.readAgentList(dto)))
     }
 
     @PutMapping
